@@ -1,0 +1,114 @@
+.legal-page {
+  min-height: calc(100vh - 200px);
+  padding: 2rem;
+  background: var(--background);
+}
+
+.legal-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: var(--surface);
+  padding: 3rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.back-button {
+  background: var(--background);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.back-button:hover {
+  background: var(--surface);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateX(-2px);
+}
+
+.legal-container h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.last-updated {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+.legal-container section {
+  margin-bottom: 2.5rem;
+}
+
+.legal-container section h2 {
+  font-size: 1.8rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: var(--primary);
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 0.5rem;
+}
+
+.legal-container section h3 {
+  font-size: 1.3rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+}
+
+.legal-container section p {
+  line-height: 1.8;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.legal-container section ul {
+  margin-left: 2rem;
+  margin-bottom: 1rem;
+}
+
+.legal-container section ul li {
+  line-height: 1.8;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.legal-container section a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.legal-container section a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .legal-page {
+    padding: 1rem;
+  }
+
+  .legal-container {
+    padding: 1.5rem;
+  }
+
+  .legal-container h1 {
+    font-size: 2rem;
+  }
+
+  .legal-container section h2 {
+    font-size: 1.5rem;
+  }
+}

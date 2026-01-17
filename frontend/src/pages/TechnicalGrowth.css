@@ -1,0 +1,172 @@
+.technical-growth {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.growth-form {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.growth-form h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.growth-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.growth-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.growth-form input,
+.growth-form select,
+.growth-form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+.growth-form input:focus,
+.growth-form select:focus,
+.growth-form textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.view-mode-btn {
+  padding: 0.5rem 1rem;
+  background: #f0f0f0;
+  color: #333;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.view-mode-btn:hover {
+  background: #e5e7eb;
+}
+
+.view-mode-btn.active {
+  background: #667eea;
+  color: white;
+}
+
+.growth-dashboard {
+  display: grid;
+  gap: 2rem;
+}
+
+.dashboard-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-section h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #333;
+  font-size: 1.25rem;
+}
+
+.practice-list,
+.docs-list,
+.wins-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.practice-card,
+.doc-card,
+.win-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s;
+}
+
+.practice-card:hover,
+.doc-card:hover,
+.win-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.practice-header,
+.doc-header,
+.win-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.practice-header h3,
+.doc-header h3,
+.win-header h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-primary {
+  background: #667eea;
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #5568d3;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.btn-secondary:hover {
+  background: #e5e7eb;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  margin: 0;
+  color: #333;
+}

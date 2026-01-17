@@ -1,0 +1,197 @@
+.immigration {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.immigration .page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.immigration .page-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: #1f2937;
+}
+
+.immigration .view-mode-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.immigration .view-mode-btn:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.immigration .view-mode-btn.active {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.immigration-dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.immigration-dashboard .dashboard-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.immigration-dashboard .dashboard-section h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.25rem;
+  color: #1f2937;
+}
+
+.immigration-form {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.immigration-form h3 {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.25rem;
+  color: #1f2937;
+}
+
+.immigration-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.immigration-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #374151;
+  font-size: 0.875rem;
+}
+
+.immigration-form input,
+.immigration-form textarea,
+.immigration-form select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-family: inherit;
+}
+
+.immigration-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.status-timeline-list,
+.documents-list,
+.deadlines-list,
+.notes-list,
+.uploads-list,
+.milestones-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.status-card,
+.document-card,
+.deadline-card,
+.note-card,
+.upload-card,
+.milestone-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.deadline-card.critical {
+  border-left: 4px solid #dc2626;
+  padding-left: 1.25rem;
+}
+
+.deadline-card.completed {
+  opacity: 0.7;
+}
+
+.status-header,
+.document-header,
+.deadline-header,
+.note-header,
+.upload-header,
+.milestone-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.status-header h3,
+.document-header h3,
+.deadline-header h3,
+.note-header h3,
+.upload-header h3,
+.milestone-header h3 {
+  margin: 0;
+  font-size: 1.125rem;
+  color: #1f2937;
+}
+
+.note-card p,
+.upload-card p,
+.milestone-card p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #2563eb;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.btn-secondary:hover {
+  background: #e5e7eb;
+}

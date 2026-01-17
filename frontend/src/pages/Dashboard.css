@@ -1,0 +1,615 @@
+.dashboard {
+  padding: 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+  background: #f5f7fa;
+  min-height: calc(100vh - 80px);
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.dashboard-widget {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-top: 4px solid;
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+}
+
+.dashboard-widget:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Widget Header Colors */
+.widget-vision {
+  border-top-color: #9b59b6;
+}
+
+.widget-tasks {
+  border-top-color: #e74c3c;
+}
+
+.widget-habits {
+  border-top-color: #f39c12;
+}
+
+.widget-health {
+  border-top-color: #27ae60;
+}
+
+.widget-journal {
+  border-top-color: #9b59b6;
+}
+
+.widget-review {
+  border-top-color: #e91e63;
+}
+
+.widget-financial {
+  border-top-color: #3498db;
+}
+
+.widget-career {
+  border-top-color: #f39c12;
+}
+
+.widget-technical {
+  border-top-color: #16a085;
+}
+
+.widget-relational {
+  border-top-color: #e91e63;
+}
+
+.widget-books {
+  border-top-color: #27ae60;
+}
+
+.widget-immigration {
+  border-top-color: #9b59b6;
+}
+
+.widget-header {
+  margin-bottom: 1rem;
+}
+
+.widget-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.widget-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.widget-empty {
+  color: #95a5a6;
+  font-style: italic;
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.widget-action-btn {
+  margin-top: auto;
+  padding: 0.5rem 1rem;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.widget-action-btn:hover {
+  background: #5568d3;
+}
+
+/* Vision Widget */
+.vision-item {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #34495e;
+  margin-bottom: 0.5rem;
+}
+
+.vision-item strong {
+  color: #2c3e50;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+/* Tasks Widget */
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.task-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.task-completed {
+  text-decoration: line-through;
+  color: #95a5a6;
+}
+
+.task-more {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  margin-top: 0.5rem;
+}
+
+.task-progress {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #ecf0f1;
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
+
+/* Habit Streak Widget */
+.habit-streak-content {
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.habit-streak-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+}
+
+.habit-streak-circle::before {
+  content: '';
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: white;
+  z-index: 1;
+}
+
+.streak-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #f39c12;
+  z-index: 2;
+  position: relative;
+}
+
+.streak-label {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  z-index: 2;
+  position: relative;
+}
+
+.habit-completion {
+  width: 100%;
+}
+
+.completion-bar {
+  width: 100%;
+  height: 8px;
+  background: #ecf0f1;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.completion-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f39c12 0%, #e67e22 100%);
+  transition: width 0.3s;
+}
+
+.completion-text {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  text-align: center;
+}
+
+/* Health Widget */
+.health-metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.health-metric:last-child {
+  border-bottom: none;
+}
+
+.metric-label {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+}
+
+.metric-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Journal Widget */
+.journal-preview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.journal-preview strong {
+  font-size: 0.9rem;
+  color: #2c3e50;
+  flex: 1;
+}
+
+.journal-mood {
+  font-size: 1.5rem;
+}
+
+.journal-date {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
+
+/* Review Widget */
+.review-content {
+  gap: 1rem;
+}
+
+.review-wins,
+.review-lessons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.review-label {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+.review-progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #ecf0f1;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.review-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #27ae60 0%, #2ecc71 100%);
+  transition: width 0.3s;
+}
+
+.review-progress-fill.lessons {
+  background: linear-gradient(90deg, #e91e63 0%, #f06292 100%);
+}
+
+.review-percentage {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #27ae60;
+  align-self: flex-end;
+}
+
+/* Financial Widget */
+.financial-content-layout {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.financial-text-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0; /* Allow flex item to shrink */
+}
+
+.financial-networth {
+  text-align: left;
+}
+
+.financial-networth strong {
+  display: block;
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  margin-bottom: 0.5rem;
+}
+
+.networth-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #3498db;
+}
+
+.financial-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.financial-metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #34495e;
+}
+
+.metric-percentage {
+  font-weight: 600;
+  color: #27ae60;
+}
+
+/* Financial Pie Chart */
+.financial-pie-chart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+  width: 140px; /* Fixed width for pie chart */
+}
+
+.pie-svg {
+  width: 100px;
+  height: 100px;
+}
+
+.pie-segment {
+  transition: stroke-dasharray 0.3s;
+}
+
+.pie-segment.savings {
+  stroke: #27ae60;
+}
+
+.pie-segment.expenses {
+  stroke: #e74c3c;
+}
+
+.pie-segment.other {
+  stroke: #3498db;
+}
+
+.pie-legend {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: #7f8c8d;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* Career Widget */
+.career-role {
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: #34495e;
+}
+
+.career-role strong {
+  color: #2c3e50;
+}
+
+.career-skills {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.skill-progress-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.skill-progress-item > span:first-child {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
+
+.skill-progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #ecf0f1;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.skill-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f39c12 0%, #e67e22 100%);
+  transition: width 0.3s;
+}
+
+.skill-progress-item > span:last-child {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  align-self: flex-end;
+}
+
+/* Technical Widget */
+.technical-metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.technical-metric:last-child {
+  border-bottom: none;
+}
+
+/* Relational Widget */
+.relational-recent {
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  color: #34495e;
+}
+
+.relational-recent strong {
+  color: #2c3e50;
+}
+
+.relational-mood {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
+
+/* Books Widget */
+.book-info {
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  color: #34495e;
+}
+
+.book-info strong {
+  color: #2c3e50;
+}
+
+.book-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.book-progress-bar {
+  width: 100%;
+  height: 10px;
+  background: #ecf0f1;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.book-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #27ae60 0%, #2ecc71 100%);
+  transition: width 0.3s;
+}
+
+.book-progress-text {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  text-align: center;
+}
+
+/* Immigration Widget */
+.immigration-next {
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  color: #34495e;
+}
+
+.immigration-next strong {
+  color: #2c3e50;
+}
+
+.immigration-date {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 1rem;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-widget {
+    min-height: auto;
+  }
+
+  .habit-streak-circle {
+    width: 100px;
+    height: 100px;
+  }
+
+  .habit-streak-circle::before {
+    width: 85px;
+    height: 85px;
+  }
+
+  .streak-number {
+    font-size: 1.5rem;
+  }
+
+  .financial-content-layout {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .financial-pie-chart {
+    width: 100%;
+    max-width: 120px;
+  }
+}

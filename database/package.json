@@ -1,0 +1,14 @@
+{
+  "name": "lifeos-database",
+  "version": "1.0.0",
+  "description": "Database migrations and schema for LifeOS",
+  "scripts": {
+    "migrate": "node scripts/migrate.js",
+    "migrate:up": "node scripts/migrate.js up",
+    "migrate:down": "node scripts/migrate.js down"
+  },
+  "dependencies": {
+    "pg": "^8.11.3",
+    "dotenv": "^16.3.1"
+  }
+}

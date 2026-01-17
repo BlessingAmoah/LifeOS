@@ -1,0 +1,217 @@
+.identity-section {
+  margin-bottom: 2rem;
+}
+
+.identity-section h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.identity-statement-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  min-height: 100px;
+}
+
+.identity-statement-card p {
+  margin: 0;
+  color: #666;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.identity-statement-edit textarea {
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.identity-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.identity-card {
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.identity-card:hover {
+  border-color: #667eea;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+  transform: translateY(-2px);
+}
+
+.identity-card-content {
+  flex: 1;
+}
+
+.identity-card h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.identity-card-value {
+  margin: 0.25rem 0;
+  color: #667eea;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.identity-card-description {
+  margin: 0.75rem 0 0 0;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.identity-card-actions {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: flex;
+  gap: 0.5rem;
+  opacity: 1;
+  transition: opacity 0.2s;
+}
+
+.identity-card-btn {
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.identity-card-btn {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+
+.identity-card-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.identity-card-btn-edit {
+  color: #2196f3;
+}
+
+.identity-card-btn-edit:hover {
+  background: #e3f2fd;
+  border-color: #2196f3;
+}
+
+.identity-card-btn-delete {
+  color: #f44336;
+}
+
+.identity-card-btn-delete:hover {
+  background: #ffebee;
+  border-color: #f44336;
+}
+
+.identity-empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem;
+  color: #999;
+  background: #fafafa;
+  border: 2px dashed #e0e0e0;
+  border-radius: 12px;
+}
+
+.identity-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 2rem;
+}
+
+.identity-modal {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.identity-modal h3 {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.identity-modal .form-group {
+  margin-bottom: 1rem;
+}
+
+.identity-modal .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.identity-modal .form-group input,
+.identity-modal .form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.identity-modal .form-group input:focus,
+.identity-modal .form-group textarea:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.identity-tab-content {
+  margin-top: 2rem;
+  min-height: 300px;
+}
+
+@media (max-width: 768px) {
+  .identity-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,149 @@
+.notifications-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem;
+  z-index: 99999;
+  overflow-y: auto;
+}
+
+.notifications-modal {
+  background: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+}
+
+.notifications-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.notifications-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.unread-badge {
+  background: #ef4444;
+  color: white;
+  border-radius: 12px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #666;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.close-button:hover {
+  background: #f0f0f0;
+}
+
+.notifications-filters {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.notifications-list {
+  padding: 1rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.notification-item {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  transition: all 0.2s;
+}
+
+.notification-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.notification-item.unread {
+  background: #f8f9fa;
+  border-left-width: 4px;
+}
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-header-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.notification-icon {
+  font-size: 1.25rem;
+}
+
+.notification-title {
+  flex: 1;
+  color: #333;
+}
+
+.unread-dot {
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+}
+
+.notification-message {
+  margin: 0.5rem 0;
+  color: #666;
+  font-size: 0.875rem;
+}
+
+.notification-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: #999;
+  margin-top: 0.5rem;
+}
+
+.notification-type {
+  text-transform: capitalize;
+}
+
+.notification-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
