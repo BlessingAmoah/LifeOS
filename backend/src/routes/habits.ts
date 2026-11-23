@@ -39,90 +39,13 @@ router.get('/', authenticate, async (req: AuthRequest, res) => {
           return `${year}-${month}-${day}`;
         };
 
-        // Only count completed logs for streaks (positive tracking)
-        const completedLogs = logsResult.rows
-          .filter((row: any) => row.status === 'completed')
-          .map((row: any) => formatDateLocal(row.completed_on));
-        
-        // Count not_completed logs for tracking missed habits
-        const notCompletedLogs = logsResult.rows
-          .filter((row: any) => row.status === 'not_completed')
-          .map((row: any) => formatDateLocal(row.completed_on));
-        
-        // Get all logs (including status) for calendar view
         const allLogs = logsResult.rows.map((row: any) => ({
           date: formatDateLocal(row.completed_on),
           status: row.status || 'completed',
         }));
-        
-        // Calculate current streak (only for completed)
-        let currentStreak = 0;
-        if (completedLogs.length > 0) {
-          const today = formatDateLocal(new Date());
-          const yesterdayDate = new Date();
-          yesterdayDate.setDate(yesterdayDate.getDate() - 1);
-          const yesterday = formatDateLocal(yesterdayDate);
-          
-          // Check if completed today or yesterday to start streak
-          if (completedLogs.includes(today) || completedLogs.includes(yesterday)) {
-            let checkDate = completedLogs.includes(today) ? today : yesterday;
-            currentStreak = 1;
-            
-            // Count backwards
-            for (let i = 1; i < 365; i++) {
-              const prevDateObj = new Date(checkDate);
-              prevDateObj.setDate(prevDateObj.getDate() - i);
-              const prevDate = formatDateLocal(prevDateObj);
-              if (completedLogs.includes(prevDate)) {
-                currentStreak++;
-              } else {
-                break;
-              }
-            }
-          }
-        }
-
-        // Calculate weekly success rate (last 7 days for daily habits, last 4 weeks for weekly)
-        // Count both completed and not_completed for tracking
-        let weeklySuccessRate = 0;
-        let totalTracked = 0;
-        if (habit.frequency === 'daily') {
-          const last7Days = Array.from({ length: 7 }, (_, i) => {
-            const date = new Date();
-            date.setDate(date.getDate() - i);
-            return formatDateLocal(date);
-          });
-          const completedDays = last7Days.filter(date => completedLogs.includes(date)).length;
-          const notCompletedDays = last7Days.filter(date => notCompletedLogs.includes(date)).length;
-          totalTracked = completedDays + notCompletedDays;
-          // Success rate is based on completed vs total tracked (completed + not_completed)
-          weeklySuccessRate = totalTracked > 0 ? Math.round((completedDays / totalTracked) * 100) : 0;
-        } else if (habit.frequency === 'weekly') {
-          // For weekly habits, check last 4 weeks
-          const weeks = Array.from({ length: 4 }, (_, i) => {
-            const weekStart = new Date();
-            weekStart.setDate(weekStart.getDate() - (i * 7));
-            const weekEnd = new Date(weekStart);
-            weekEnd.setDate(weekEnd.getDate() + 6);
-            return { start: formatDateLocal(weekStart), end: formatDateLocal(weekEnd) };
-          });
-          const completedWeeks = weeks.filter(week => 
-            completedLogs.some(log => log >= week.start && log <= week.end)
-          ).length;
-          const notCompletedWeeks = weeks.filter(week => 
-            notCompletedLogs.some(log => log >= week.start && log <= week.end)
-          ).length;
-          totalTracked = completedWeeks + notCompletedWeeks;
-          weeklySuccessRate = totalTracked > 0 ? Math.round((completedWeeks / totalTracked) * 100) : 0;
-        }
 
         return {
           ...habit,
-          currentStreak,
-          weeklySuccessRate,
-          totalCompletions: completedLogs.length,
-          totalNotCompleted: notCompletedLogs.length,
-          totalTracked: completedLogs.length + notCompletedLogs.length,
           calendarData: allLogs.map((log: any) => log.date), // Array of completion dates (YYYY-MM-DD format)
           calendarDataWithStatus: allLogs, // Array with status for calendar view
         };

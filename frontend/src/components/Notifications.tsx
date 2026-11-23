@@ -8,7 +8,7 @@ import './Notifications.css';
 
 interface Notification {
   id: string;
-  type: 'deadline' | 'habit_streak' | 'career_task' | 'reminder' | 'system';
+  type: 'deadline' | 'career_task' | 'reminder' | 'system';
   title: string;
   message: string | null;
   related_module: string | null;
@@ -61,7 +61,6 @@ const Notifications = ({ onClose }: { onClose: () => void }) => {
   const getTypeIcon = (type: string) => {
     const icons: { [key: string]: string } = {
       deadline: '⏰',
-      habit_streak: '🔥',
       career_task: '💼',
       reminder: '🔔',
       system: 'ℹ️',

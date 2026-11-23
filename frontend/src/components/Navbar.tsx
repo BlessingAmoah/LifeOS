@@ -4,21 +4,14 @@ import { useQuery } from '@tanstack/react-query';
 import { useAuthStore } from '../context/AuthContext';
 import api from '../services/api';
 import GlobalSearch from './GlobalSearch';
-import Notifications from './Notifications';
+// Notifications removed per design doc - only immigration deadlines are kept (handled in Immigration module)
 import './Navbar.css';
 
 const Navbar = () => {
   const { isAuthenticated, user, logout } = useAuthStore();
   const location = useLocation();
   const [showSearch, setShowSearch] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false);
-
-  const { data: unreadCount } = useQuery<{ count: number }>({
-    queryKey: ['notifications-unread-count'],
-    queryFn: () => api.get('/notifications/unread-count').then(res => res.data),
-    enabled: isAuthenticated && location.pathname.startsWith('/dashboard'),
-    refetchInterval: 30000, // Refetch every 30 seconds
-  });
+  // Notifications removed per design doc - only immigration deadlines are kept (handled in Immigration module)
 
   // Fetch profile to get name and avatar
   const { data: profile } = useQuery({
@@ -61,12 +54,6 @@ const Navbar = () => {
           <button onClick={() => setShowSearch(true)} className="navbar-search-btn" title="Global Search">
             🔍
           </button>
-          <button onClick={() => setShowNotifications(true)} className="navbar-notifications-btn" title="Notifications">
-            🔔
-            {unreadCount && unreadCount.count > 0 && (
-              <span className="navbar-notification-badge">{unreadCount.count}</span>
-            )}
-          </button>
           <span className="navbar-welcome">
             Welcome back, {displayName}
           </span>
@@ -85,7 +72,6 @@ const Navbar = () => {
         </div>
       </div>
       {showSearch && <GlobalSearch onClose={() => setShowSearch(false)} />}
-      {showNotifications && <Notifications onClose={() => setShowNotifications(false)} />}
     </nav>
   );
 };

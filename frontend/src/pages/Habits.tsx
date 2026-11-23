@@ -125,7 +125,6 @@ const Habits = () => {
                       { key: 'name', label: 'Name' },
                       { key: 'category', label: 'Category' },
                       { key: 'frequency', label: 'Frequency' },
-                      { key: 'current_streak', label: 'Streak' },
                     ],
                     'habits-export'
                   )} 
@@ -543,10 +542,6 @@ const HabitCard = ({
         <p className="habit-identity">{habit.identity_link}</p>
       )}
                 <div className="habit-stats">
-                  <div className="stat-item">
-                    <span className="stat-label">Streak:</span>
-                    <span className="stat-value streak">{habit.currentStreak || 0} 🔥</span>
-                  </div>
                   <div className="stat-item">
                     <span className="stat-label">Success Rate:</span>
                     <span className="stat-value">{habit.weeklySuccessRate || 0}%</span>

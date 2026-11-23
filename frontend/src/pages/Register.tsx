@@ -58,15 +58,8 @@ const Register = () => {
 
   const handleVerificationSuccess = (token?: string) => {
     if (token) {
-      // Get user info and set auth
-      api.get('/profiles').then(() => {
-        setAuth({ id: '', email: registeredEmail, is_verified: true }, token);
-        navigate('/dashboard');
-      }).catch(() => {
-        // If profile doesn't exist yet, just set basic auth
-        setAuth({ id: '', email: registeredEmail, is_verified: true }, token);
-        navigate('/dashboard');
-      });
+      setAuth({ id: '', email: registeredEmail, is_verified: true }, token);
+      navigate('/dashboard');
     } else {
       // Just close modal, user can login
       setShowVerificationModal(false);

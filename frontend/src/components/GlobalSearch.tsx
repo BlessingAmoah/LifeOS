@@ -18,7 +18,6 @@ interface SearchResult {
 
 interface SearchResults {
   journals: SearchResult[];
-  tasks: SearchResult[];
   habits: SearchResult[];
   reviews: SearchResult[];
   documents: SearchResult[];
@@ -49,7 +48,6 @@ const GlobalSearch = ({ onClose }: { onClose: () => void }) => {
 
   const modules = [
     { id: 'journals', label: 'Journals', icon: '📝' },
-    { id: 'tasks', label: 'Tasks', icon: '📋' },
     { id: 'habits', label: 'Habits', icon: '✅' },
     { id: 'reviews', label: 'Reviews', icon: '🔍' },
     { id: 'documents', label: 'Documents', icon: '📁' },
@@ -71,7 +69,6 @@ const GlobalSearch = ({ onClose }: { onClose: () => void }) => {
   const getTypeLabel = (type: string) => {
     const labels: { [key: string]: string } = {
       journal: 'Journal',
-      task: 'Task',
       habit: 'Habit',
       review: 'Review',
       document: 'Document',
@@ -88,7 +85,6 @@ const GlobalSearch = ({ onClose }: { onClose: () => void }) => {
   const getTypeIcon = (type: string) => {
     const icons: { [key: string]: string } = {
       journal: '📝',
-      task: '📋',
       habit: '✅',
       review: '🔍',
       document: '📁',
@@ -106,7 +102,6 @@ const GlobalSearch = ({ onClose }: { onClose: () => void }) => {
     // Map module to dashboard routes
     const routeMap: { [key: string]: string } = {
       journals: '/dashboard/journals',
-      tasks: '/dashboard/tasks',
       habits: '/dashboard/habits',
       reviews: '/dashboard/reviews',
       documents: '/dashboard/documents',

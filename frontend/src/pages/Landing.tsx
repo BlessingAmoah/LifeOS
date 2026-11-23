@@ -28,10 +28,10 @@ const Landing = () => {
 
         <div className="feature-card">
           <div className="feature-icon">📝</div>
-          <h3>Sprint-Based Workflow</h3>
+          <h3>Structured Planning</h3>
           <p>
-            Organize your tasks and goals using a sprint-style workflow. Plan, execute, 
-            and reflect on your progress with weekly and quarterly reviews.
+            Organize your goals and actions effectively. Plan, execute,
+            and reflect on your progress with regular reviews.
           </p>
         </div>
 
@@ -70,8 +70,8 @@ const Landing = () => {
           </div>
           <div className="step">
             <div className="step-number">3</div>
-            <h4>Plan & Execute</h4>
-            <p>Use sprint-style task management to break down your goals into actionable daily tasks.</p>
+            <h4>Plan & Execute Goals</h4>
+            <p>Use structured planning to break down your goals into actionable steps.</p>
           </div>
           <div className="step">
             <div className="step-number">4</div>

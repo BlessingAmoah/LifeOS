@@ -9,23 +9,14 @@ const Layout = () => {
   const navItems = [
     { path: '', label: 'Dashboard', icon: '📊' },
     { path: 'identity', label: 'Identity', icon: '👤' },
-    { path: 'vision', label: 'Vision', icon: '🎯' },
-    { path: 'profile', label: 'Profile', icon: '⚙️' },
-    { path: 'journals', label: 'Journals', icon: '📝' },
+    { path: 'employment', label: 'Employment', icon: '💼' },
+    { path: 'finance', label: 'Finance', icon: '💰' },
+    { path: 'christian-life', label: 'Christian Life', icon: '🙏' },
+    { path: 'personal', label: 'Personal', icon: '🤝' },
     { path: 'habits', label: 'Habits', icon: '✅' },
-    { path: 'tasks', label: 'Tasks', icon: '📋' },
-    { path: 'reviews', label: 'Reviews', icon: '🔍' },
     { path: 'health', label: 'Health', icon: '💪' },
     { path: 'documents', label: 'Documents', icon: '📁' },
-    { path: 'projects', label: 'Projects', icon: '🚀' },
-        { path: 'financial', label: 'Financial', icon: '💰' },
-        { path: 'spiritual', label: 'Spiritual', icon: '🙏' },
-        { path: 'career', label: 'Career', icon: '💼' },
-        { path: 'technical-growth', label: 'Technical Growth', icon: '🧠' },
-        { path: 'relational-patterns', label: 'Relational Patterns', icon: '🤝' },
-        { path: 'books', label: 'Books', icon: '📚' },
-        { path: 'immigration', label: 'Immigration', icon: '🌍' },
-        { path: 'analytics', label: 'Analytics', icon: '📊' },
+    { path: 'immigration', label: 'Immigration', icon: '🌍' },
   ];
 
   return (

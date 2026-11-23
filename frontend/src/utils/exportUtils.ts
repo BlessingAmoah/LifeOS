@@ -143,7 +143,6 @@ export const exportTasksToCSV = (tasks: any[]) => {
     'Status': t.status || '',
     'Priority': t.priority || '',
     'Due Date': t.due_date || '',
-    'Sprint': t.sprint_name || '',
     'Description': t.description?.substring(0, 200) || '',
   }));
   exportToCSV(data, 'tasks-export');
@@ -157,7 +156,6 @@ export const exportHabitsToCSV = (habits: any[]) => {
     'Name': h.name || '',
     'Category': h.category || '',
     'Frequency': h.frequency || '',
-    'Current Streak': h.current_streak || 0,
     'Weekly Success Rate': `${h.weekly_success_rate || 0}%`,
     'Total Completions': h.total_completions || 0,
   }));

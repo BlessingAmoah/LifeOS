@@ -30,8 +30,8 @@ const TermsOfService = () => {
           <ul>
             <li>Identity and vision tracking</li>
             <li>Journaling and reflection tools</li>
-            <li>Habit tracking and streak monitoring</li>
-            <li>Task and sprint management</li>
+            <li>Habit tracking</li>
+            <li>Task management</li>
             <li>Health logging and goal tracking</li>
             <li>Financial tracking and budgeting</li>
             <li>Document storage and organization</li>

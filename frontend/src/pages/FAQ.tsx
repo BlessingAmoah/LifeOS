@@ -30,7 +30,7 @@ const FAQ = () => {
       questions: [
         {
           q: 'What can I track in LifeOS?',
-          a: 'LifeOS allows you to track multiple aspects of your life including: identity and vision, journal entries, daily habits, tasks and sprints, health logs, financial data, career goals, spiritual growth, books you\'re reading, immigration status, and more. It\'s designed to be your comprehensive personal operating system.'
+          a: 'LifeOS allows you to track multiple aspects of your life including: identity and vision, journal entries, daily habits, tasks, health logs, financial data, career goals, spiritual growth, books you\'re reading, immigration status, and more. It\'s designed to be your comprehensive personal operating system.'
         },
         {
           q: 'How do I set up my identity and vision?',
@@ -42,11 +42,11 @@ const FAQ = () => {
         },
         {
           q: 'How does habit tracking work?',
-          a: 'Create habits with a name, category, and frequency (daily or weekly). Log your habit completion status each day using the calendar view or list view. LifeOS automatically calculates your streak and weekly success rate to help you build consistency.'
+          a: 'Create habits with a name, category, and frequency (daily or weekly). Log your habit completion status each day using the calendar view or list view. LifeOS helps you build consistency.'
         },
         {
-          q: 'What is sprint-based task management?',
-          a: 'Sprint-based workflow helps you organize tasks into time-bound periods (sprints). You can create sprints, assign tasks to them, track progress on a Kanban board, and conduct retrospectives. This approach helps break down long-term goals into manageable daily actions.'
+          q: 'How can I manage tasks?',
+          a: 'LifeOS helps you organize tasks into manageable periods. You can create tasks, assign them to these periods, track progress, and reflect on your achievements. This approach helps break down long-term goals into manageable daily actions.'
         }
       ]
     },
