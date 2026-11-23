@@ -10,7 +10,11 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: lifeos-frontend
-  NODE_VERSION: '18.x'
+  NODE_VERSION: '24.x'
+
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
   build-and-deploy:
@@ -33,11 +37,25 @@ jobs:
           cd frontend
           npm run build
         env:
-          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_API_URL: https://lifeos-backend.azurewebsites.net/api
+
+      - name: Prepare deployment package
+        run: |
+          npm prune --omit=dev --prefix frontend
+          mkdir -p "$RUNNER_TEMP/lifeos-frontend"
+          cp -R frontend/dist/. "$RUNNER_TEMP/lifeos-frontend/"
+          cp frontend/server.js "$RUNNER_TEMP/lifeos-frontend/"
+          cp -R frontend/node_modules "$RUNNER_TEMP/lifeos-frontend/"
+
+      - name: Log in to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_FRONTEND }}
-          package: ./frontend/dist
+          package: ${{ runner.temp }}/lifeos-frontend

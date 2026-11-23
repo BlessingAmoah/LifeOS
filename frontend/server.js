@@ -5,6 +5,8 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+app.use('/node_modules', (_req, res) => res.sendStatus(404));
+
 // Serve static files from current directory (dist files are at root)
 app.use(express.static(path.join(__dirname), {
   index: false, // Don't auto-serve index.html, we'll handle it manually
