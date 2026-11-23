@@ -74,7 +74,7 @@ const Identity = () => {
   const [strengths, setStrengths] = useState<IdentityItem[]>([]);
   const [growthAreas, setGrowthAreas] = useState<IdentityItem[]>([]);
   const [identityStatement, setIdentityStatement] = useState('');
-  const identityStatementTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const identityStatementTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (profile) {
@@ -385,9 +385,9 @@ const Identity = () => {
                 setIdentityStatement(e.target.value);
                 // Auto-save on change with debounce
                 if (identityStatementTimeoutRef.current) {
-                  clearTimeout(identityStatementTimeoutRef.current);
+                  window.clearTimeout(identityStatementTimeoutRef.current);
                 }
-                identityStatementTimeoutRef.current = setTimeout(() => {
+                identityStatementTimeoutRef.current = window.setTimeout(() => {
                   updateMutation.mutate({
                     identityStatement: e.target.value,
                     coreValues,
