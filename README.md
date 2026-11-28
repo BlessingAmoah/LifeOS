@@ -41,10 +41,50 @@ Financial Summary cover all recorded transaction dates. Cash-flow surplus is
 positive income minus expenses, not a savings account balance; the API retains
 the legacy `savings` and `savings_rate` field names for compatibility.
 No recorded activity is labeled separately from genuine zero totals, and ratios
-without income or active budgets are shown as not applicable. Summary and latest
+without income or active budgets are shown as N/A with explanatory hover text. Summary and latest
 net-worth failures show retry controls rather than appearing as empty data.
 Transaction edits refresh cash flow, budget spending, and dashboard reports;
 budget and savings-goal edits refresh their dashboard sections.
+
+### Manual financial accounts
+
+Finance -> Accounts supports checking, savings, cash, credit-card, investment,
+loan, and other accounts, with a curated US/Ghana institution dropdown and a custom
+institution option. Discover is labeled as part of Capital One following its
+[completed acquisition](https://www.capitalone.com/about/newsroom/capital-one-completes-acquisition-of-discover/). This is a manual
+directory, not bank linking or a comprehensive/current provider registry.
+Only an optional four-digit suffix is stored; full account/card numbers and CVVs
+are not accepted fields.
+
+Apply `032_add_financial_accounts.sql` before release. It creates new account and
+balance-history tables without changing existing transactions, goals, investments,
+or net-worth snapshots. Account creation and its initial balance are atomic.
+Balance observations are append-only: the latest balance-as-of date wins, with
+the newest entry taking precedence for the same date. Archiving preserves all
+history and accounts can be restored. Currency is immutable after creation;
+USD, GHS (Ghanaian cedi), CAD, EUR, GBP, AUD, NZD, CHF, and JPY are supported without conversion or
+combined totals. Decimal amounts are stored and returned exactly.
+
+Balances older than 30 days or manually marked outdated are labeled. Future-dated
+observations are flagged. A manual outdated flag remains until explicitly cleared
+in Edit Account. Credit-card/loan values are amounts owed; a negative value means
+a credit or overpayment. These balances do not update other financial modules.
+Insurance tracking is deferred to the next separately reviewed step.
+
+Institution and account type are independent: one bank or app can have separate
+checking, savings, credit-card, and investment entries, each with its own history.
+Ghanaian bank choices are curated from the
+[Bank of Ghana register](https://www.bog.gov.gh/supervision-regulation/registered-institutions/banks/).
+[MTN MoMo](https://mtn.com.gh/momo/) is listed as mobile money, not a bank.
+[OnePay banking](https://www.onepay.com/help-center/articles/about-onepay-banking)
+uses partner banks; its checking and savings sections share a deposit account.
+Record section balances without duplicating the combined deposit balance.
+[OnePay Invest](https://www.onepay.com/help-center/articles/about-onepay-invest)
+is a separate investment choice. Apple Card is a credit-card choice for tracking
+the amount owed, separate from its associated savings account.
+Apple Savings is listed as an Apple Card savings
+product, with form guidance to distinguish its balance from the Apple Card amount
+owed. Apple Pay is excluded because it is a payment wallet, not a separate account.
 
 ### Restored profile, Career, and Budget routes
 

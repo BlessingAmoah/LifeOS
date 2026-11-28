@@ -13,6 +13,7 @@ import documentRoutes from './routes/documents';
 import healthGoalsRoutes from './routes/health-goals';
 import visionBoardsRoutes from './routes/vision-boards';
 import transactionsRoutes from './routes/transactions';
+import financialAccountsRoutes from './routes/financial-accounts';
 import savingsGoalsRoutes from './routes/savings-goals';
 import investmentsRoutes from './routes/investments';
 import netWorthRoutes from './routes/net-worth';
@@ -77,6 +78,7 @@ app.get('/', (_req, res) => {
       habits: '/api/habits',
       documents: '/api/documents',
       transactions: '/api/transactions',
+      financialAccounts: '/api/financial-accounts',
       savingsGoals: '/api/savings-goals',
       financialPlans: '/api/financial-plans',
       investments: '/api/investments',
@@ -114,6 +116,7 @@ app.get('/api', (_req, res) => {
       documents: '/api/documents',
       health: '/api/health',
       transactions: '/api/transactions',
+      financialAccounts: '/api/financial-accounts',
       savingsGoals: '/api/savings-goals',
       investments: '/api/investments',
       netWorth: '/api/net-worth',
@@ -130,6 +133,7 @@ app.use('/api/health', healthRoutes);
     app.use('/api/vision-boards', visionBoardsRoutes);
     app.use('/api/documents', documentRoutes);
     app.use('/api/transactions', transactionsRoutes);
+    app.use('/api/financial-accounts', financialAccountsRoutes);
     app.use('/api/savings-goals', savingsGoalsRoutes);
     app.use('/api/financial-plans', financialPlansRoutes);
     app.use('/api/investments', investmentsRoutes);

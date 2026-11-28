@@ -5,6 +5,7 @@ import api from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
 import EmptyState from '../components/EmptyState';
+import FinancialAccounts from '../components/FinancialAccounts';
 import { exportTransactionsToCSV, exportToPDF } from '../utils/exportUtils';
 import './Financial.css';
 
@@ -125,7 +126,7 @@ interface NetWorthSnapshot {
 }
 
 const Financial = () => {
-  const [viewMode, setViewMode] = useState<'transactions' | 'budgets' | 'goals' | 'summary' | 'investments' | 'networth' | 'dashboard' | 'cashflow' | 'planning'>('dashboard');
+  const [viewMode, setViewMode] = useState<'transactions' | 'budgets' | 'goals' | 'summary' | 'investments' | 'networth' | 'dashboard' | 'cashflow' | 'planning' | 'accounts'>('dashboard');
   const [showTransactionForm, setShowTransactionForm] = useState(false);
   const [showBudgetForm, setShowBudgetForm] = useState(false);
   const [showGoalForm, setShowGoalForm] = useState(false);
@@ -798,8 +799,9 @@ const Financial = () => {
     <div className="financial">
       <div className="page-header">
         <h1>Financial</h1>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap', minWidth: 0 }}>
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <button onClick={() => setViewMode('accounts')} style={{ padding: '0.5rem 1rem', background: viewMode === 'accounts' ? '#667eea' : '#f0f0f0', color: viewMode === 'accounts' ? 'white' : '#333', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Accounts</button>
             <button
               onClick={() => setViewMode('transactions')}
               style={{
@@ -1041,13 +1043,14 @@ const Financial = () => {
                     <p style={{ margin: 0, fontSize: '2rem', fontWeight: 'bold', color: '#10b981' }}>
                       ${dashboardData.overview.savings.toFixed(2)}
                     </p>
-                    <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.875rem', color: '#666' }}>Positive income minus expenses; not a savings account balance.</p>
+                    <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.875rem', color: '#666' }}>Income minus expenses, floored at zero; not a savings account balance.</p>
                   </div>
                   <div style={{ background: dashboardData.overview.net_cash_flow >= 0 ? '#d1fae5' : '#fee2e2', padding: '1.5rem', borderRadius: '8px' }}>
                     <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '0.875rem', color: '#666' }}>Net Cash Flow</h3>
                     <p style={{ margin: 0, fontSize: '2rem', fontWeight: 'bold', color: dashboardData.overview.net_cash_flow >= 0 ? '#10b981' : '#ef4444' }}>
                       {dashboardData.overview.net_cash_flow >= 0 ? '+' : ''}${dashboardData.overview.net_cash_flow.toFixed(2)}
                     </p>
+                    <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.875rem', color: '#666' }}>Income minus expenses, including deficits.</p>
                   </div>
                 </div>
               </div>
@@ -1059,20 +1062,20 @@ const Financial = () => {
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
                     <div style={{ background: '#f0f9ff', padding: '1rem', borderRadius: '8px' }}>
                       <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '0.875rem', color: '#666' }}>Cash-flow Surplus Rate</h3>
-                      <p style={{ margin: 0, fontSize: '1.5rem', fontWeight: 'bold', color: '#667eea' }}>
-                        {dashboardData.overview.income > 0 ? `${dashboardData.health_indicators.savings_rate.toFixed(1)}%` : 'Not applicable (no income)'}
+                      <p title={dashboardData.overview.income > 0 ? undefined : 'No recorded income for this period'} style={{ margin: 0, fontSize: '1.5rem', fontWeight: 'bold', color: '#667eea' }}>
+                        {dashboardData.overview.income > 0 ? `${dashboardData.health_indicators.savings_rate.toFixed(1)}%` : 'N/A'}
                       </p>
                     </div>
                     <div style={{ background: '#f0f9ff', padding: '1rem', borderRadius: '8px' }}>
                       <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '0.875rem', color: '#666' }}>Expense-to-Income</h3>
-                      <p style={{ margin: 0, fontSize: '1.5rem', fontWeight: 'bold', color: '#667eea' }}>
-                        {dashboardData.overview.income > 0 ? `${dashboardData.health_indicators.expense_to_income_ratio.toFixed(1)}%` : 'Not applicable (no income)'}
+                      <p title={dashboardData.overview.income > 0 ? undefined : 'No recorded income for this period'} style={{ margin: 0, fontSize: '1.5rem', fontWeight: 'bold', color: '#667eea' }}>
+                        {dashboardData.overview.income > 0 ? `${dashboardData.health_indicators.expense_to_income_ratio.toFixed(1)}%` : 'N/A'}
                       </p>
                     </div>
                     <div style={{ background: '#f0f9ff', padding: '1rem', borderRadius: '8px' }}>
                       <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '0.875rem', color: '#666' }}>Budget Adherence</h3>
-                      <p style={{ margin: 0, fontSize: '1.5rem', fontWeight: 'bold', color: '#667eea' }}>
-                        {dashboardData.budgets.length > 0 ? `${dashboardData.health_indicators.budget_adherence.toFixed(1)}%` : 'No active budgets'}
+                      <p title={dashboardData.budgets.length > 0 ? undefined : 'No active budgets'} style={{ margin: 0, fontSize: '1.5rem', fontWeight: 'bold', color: '#667eea' }}>
+                        {dashboardData.budgets.length > 0 ? `${dashboardData.health_indicators.budget_adherence.toFixed(1)}%` : 'N/A'}
                       </p>
                     </div>
                   </div>
@@ -1218,6 +1221,8 @@ const Financial = () => {
           )}
         </>
       )}
+
+      {viewMode === 'accounts' && <FinancialAccounts />}
 
       {/* Cash Flow View */}
       {viewMode === 'cashflow' && (

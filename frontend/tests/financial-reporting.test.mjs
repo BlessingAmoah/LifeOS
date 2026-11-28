@@ -29,7 +29,7 @@ test('Finance identifies surplus, reporting dates, and absent activity without d
   assert.match(empty, /2024-02-01/);
   assert.match(empty, /2024-02-29/);
   assert.match(empty, /No income or expense transactions recorded for this period/);
-  assert.match(empty, /Not applicable \(no income\)/);
+  assert.match(empty, /title="No recorded income for this period"[^>]*>N\/A/);
   assert.match(empty, /No active budgets/);
 
   client.setQueryData(['financial-dashboard'], {

@@ -27,7 +27,7 @@ test('Career and Budget endpoints are registered and use the authenticated user'
   const base = `http://127.0.0.1:${server.address().port}/api`;
   const headers = { Authorization: `Bearer ${generateToken({ userId })}` };
   const paths = [
-    '/budgets', '/budgets/summary', '/career-goals', '/skills', '/roles',
+    '/financial-accounts', '/budgets', '/budgets/summary', '/career-goals', '/skills', '/roles',
     '/feedback-notes', '/resume-versions', '/interview-prep',
     '/career-milestones', '/career-profile', '/impact-notes', '/applications',
   ];
