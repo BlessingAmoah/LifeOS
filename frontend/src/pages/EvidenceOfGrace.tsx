@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -18,19 +19,23 @@ const PILLARS = [
 ];
 
 const EvidenceOfGrace = () => {
+  const [searchParams] = useSearchParams();
+  const selectedPillar = PILLARS.find(pillar => pillar.value === searchParams.get('pillar'))?.value || '';
   const queryClient = useQueryClient();
   const { data: quarterInfo } = useCurrentQuarter();
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
-    pillar: '',
+    pillar: selectedPillar,
     title: '',
     description: '',
     testimony: '',
   });
 
   const { data: evidence, isLoading, error } = useQuery({
-    queryKey: ['evidence-of-grace'],
-    queryFn: () => api.get('/stewardship/evidence-of-grace').then(res => res.data),
+    queryKey: ['evidence-of-grace', selectedPillar],
+    queryFn: () => api.get('/stewardship/evidence-of-grace', {
+      params: selectedPillar ? { pillar: selectedPillar } : {},
+    }).then(res => res.data),
   });
 
   const createMutation = useMutation({
@@ -38,7 +43,7 @@ const EvidenceOfGrace = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['evidence-of-grace'] });
       setShowForm(false);
-      setFormData({ pillar: '', title: '', description: '', testimony: '' });
+      setFormData({ pillar: selectedPillar, title: '', description: '', testimony: '' });
     },
   });
 

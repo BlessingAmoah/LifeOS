@@ -21,9 +21,24 @@ A private, cloud-hosted personal dashboard designed to help individuals intentio
 
 ## Features
 
+### Christian Life and Personal Growth
+
+`/dashboard/christian-life` and `/dashboard/personal` provide reflection-focused
+pages based on the stewardship design: Rule of Life, scripture anchors,
+intercession, work reflections, learning themes, book archive, relational
+reflections, and character notes. They link to the relevant quarterly audit and
+grace log without daily tracking, streaks, or reading progress bars.
+
+Reflections are saved per user and pillar through
+`/api/stewardship/growth/:pillar`. Apply migration
+`031_add_growth_content.sql` before deploying these pages. This migration creates
+an empty table and does not alter existing user records or seed data.
+
 ### Restored profile, Career, and Budget routes
 
-The navigation avatar opens `/dashboard/profile` for account settings. Career
+The navigation avatar opens `/dashboard/profile` for account settings. The Avatar
+Upload tab places a labeled Upload Photo control directly below the profile picture.
+Career
 and Budget APIs used by the existing pages are registered again. Their tables
 come from migrations `015`, `019`, and `020`; verify these are applied before
 deploying to a new database. Restoring routes does not run migrations or seed data.

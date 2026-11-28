@@ -4,6 +4,7 @@ import { StewardshipController } from './stewardship.controller';
 import { authenticate } from '../../middleware/auth.middleware';
 import { StewardshipService } from './stewardship.service';
 import db from '../../config/db';
+import growthRoutes from './growth.routes';
 
 const router = express.Router();
 const stewardshipService = new StewardshipService(db);
@@ -11,6 +12,7 @@ const stewardshipController = new StewardshipController(stewardshipService);
 
 // All routes require authentication
 router.use(authenticate);
+router.use('/growth', growthRoutes);
 
 // Current quarter info
 router.get('/current-quarter', (req, res) => stewardshipController.getCurrentQuarter(req, res));

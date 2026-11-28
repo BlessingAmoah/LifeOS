@@ -7,6 +7,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Identity from './pages/Identity';
 import Profile from './pages/Profile';
+import GrowthPillar from './pages/GrowthPillar';
 import Habits from './pages/Habits';
 import Health from './pages/Health';
 import Documents from './pages/Documents';
@@ -50,6 +51,8 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="identity" element={<Identity />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="christian-life" element={<GrowthPillar key="christian_life" pillar="christian_life" />} />
+          <Route path="personal" element={<GrowthPillar key="personal_growth" pillar="personal_growth" />} />
           <Route path="employment" element={<Career />} />
           <Route path="finance" element={<Financial />} />
           <Route path="habits" element={<Habits />} />

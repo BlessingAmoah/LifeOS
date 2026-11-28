@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 //import ErrorMessage from '../components/ErrorMessage';
@@ -20,9 +20,12 @@ const PILLARS = [
 
 const QuarterlyAudit = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const queryClient = useQueryClient();
   const { data: quarterInfo } = useCurrentQuarter();
-  const [currentPillarIndex, setCurrentPillarIndex] = useState(0);
+  const [currentPillarIndex, setCurrentPillarIndex] = useState(() =>
+    Math.max(0, PILLARS.findIndex(pillar => pillar.value === searchParams.get('pillar')))
+  );
   const [formData, setFormData] = useState<Record<string, any>>({});
 
   const currentPillar = PILLARS[currentPillarIndex];

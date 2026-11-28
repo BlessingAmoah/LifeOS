@@ -12,7 +12,7 @@ const Layout = () => {
     { path: 'employment', label: 'Employment', icon: '💼' },
     { path: 'finance', label: 'Finance', icon: '💰' },
     { path: 'christian-life', label: 'Christian Life', icon: '🙏' },
-    { path: 'personal', label: 'Personal', icon: '🤝' },
+    { path: 'personal', label: 'Personal Growth', icon: '🤝' },
     { path: 'habits', label: 'Habits', icon: '✅' },
     { path: 'health', label: 'Health', icon: '💪' },
     { path: 'documents', label: 'Documents', icon: '📁' },

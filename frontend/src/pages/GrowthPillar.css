@@ -1,0 +1,99 @@
+.growth-pillar {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+  color: #25352f;
+}
+
+.growth-pillar h1,
+.growth-pillar h2 {
+  font-family: Georgia, serif;
+}
+
+.growth-pillar header {
+  margin-bottom: 2.5rem;
+}
+
+.growth-pillar p {
+  line-height: 1.7;
+}
+
+.growth-scripture {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-left: 3px solid #647c68;
+  background: #f5f7f4;
+}
+
+.growth-sections {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem;
+}
+
+.growth-section {
+  min-width: 0;
+}
+
+.growth-cross {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.growth-cross .growth-upward { grid-column: 2; }
+.growth-cross .growth-withward { grid-column: 1; grid-row: 2; }
+.growth-cross .growth-inward { grid-column: 2; grid-row: 2; }
+.growth-cross .growth-outward { grid-column: 3; grid-row: 2; }
+.growth-cross .growth-scripture_anchors,
+.growth-cross .growth-intercession_legacy,
+.growth-cross .growth-work_altar { grid-column: 1 / -1; }
+
+.growth-pillar textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 1rem;
+  border: 1px solid #b6c1b8;
+  border-radius: 6px;
+  font: inherit;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+.growth-pillar textarea:focus-visible,
+.growth-pillar button:focus-visible,
+.growth-pillar a:focus-visible {
+  outline: 2px solid #526b57;
+  outline-offset: 3px;
+}
+
+.growth-save,
+.growth-related {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.growth-save button {
+  padding: 0.8rem 1.2rem;
+  background: #526b57;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.growth-save button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.growth-related a {
+  color: #3e5944;
+}
+
+@media (max-width: 800px) {
+  .growth-pillar { padding: 1rem; }
+  .growth-sections { grid-template-columns: 1fr; }
+  .growth-cross .growth-section { grid-column: auto; grid-row: auto; }
+}

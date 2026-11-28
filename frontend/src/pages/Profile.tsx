@@ -515,7 +515,7 @@ const AvatarSection = ({
             type="file"
             accept="image/jpeg,image/jpg,image/png,image/webp"
             onChange={onAvatarUpload}
-            style={{ display: 'none' }}
+            disabled={avatarMutation.isPending}
           />
           <span className="avatar-upload-text">
             {avatarMutation.isPending ? 'Uploading...' : 'Upload Photo'}

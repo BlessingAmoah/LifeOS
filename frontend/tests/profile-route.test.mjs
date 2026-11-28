@@ -59,4 +59,19 @@ test('the navbar profile destination renders the profile without ending the sess
   assert.match(html, /Test User/);
   assert.equal(useAuthStore.getState().isAuthenticated, true);
   assert.equal(useAuthStore.getState().token, 'test-token');
+  for (const [path, pillar, heading] of [
+    ['/dashboard/christian-life', 'christian_life', 'Rule of Life'],
+    ['/dashboard/personal', 'personal_growth', 'Learning Themes'],
+  ]) {
+    client.setQueryData(['growth-content', pillar], {
+      content: { [pillar === 'christian_life' ? 'upward' : 'learning_themes']: 'Saved reflection' },
+      updated_at: null,
+    });
+    globalThis.window.location.pathname = path;
+    const page = renderToString(wrap(React.createElement(App)));
+    assert.ok(page.includes(heading), `${path} must render the intended page`);
+    assert.match(page, /Saved reflection/);
+    assert.ok(page.includes(`quarterly-audit?pillar=${pillar}`));
+    assert.equal(useAuthStore.getState().isAuthenticated, true);
+  }
 });
