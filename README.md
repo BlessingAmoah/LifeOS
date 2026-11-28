@@ -34,6 +34,18 @@ Reflections are saved per user and pillar through
 `031_add_growth_content.sql` before deploying these pages. This migration creates
 an empty table and does not alter existing user records or seed data.
 
+### Finance reporting
+
+The Finance dashboard reports its calendar-month date range. Cash Flow and
+Financial Summary cover all recorded transaction dates. Cash-flow surplus is
+positive income minus expenses, not a savings account balance; the API retains
+the legacy `savings` and `savings_rate` field names for compatibility.
+No recorded activity is labeled separately from genuine zero totals, and ratios
+without income or active budgets are shown as not applicable. Summary and latest
+net-worth failures show retry controls rather than appearing as empty data.
+Transaction edits refresh cash flow, budget spending, and dashboard reports;
+budget and savings-goal edits refresh their dashboard sections.
+
 ### Restored profile, Career, and Budget routes
 
 The navigation avatar opens `/dashboard/profile` for account settings. The Avatar

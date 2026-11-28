@@ -144,6 +144,12 @@ const Financial = () => {
   const [filterInvestmentType, setFilterInvestmentType] = useState<'all' | 'stock' | 'bond' | 'mutual_fund' | 'etf' | 'crypto' | 'real_estate' | 'other'>('all');
   const queryClient = useQueryClient();
 
+  const invalidateTransactionReports = () => {
+    for (const key of ['transactions', 'transaction-summary', 'financial-dashboard', 'cash-flow', 'budget-summary']) {
+      void queryClient.invalidateQueries({ queryKey: [key] });
+    }
+  };
+
   // Transactions query
   const { data: transactions, isLoading: transactionsLoading, error: transactionsError } = useQuery<Transaction[]>({
     queryKey: ['transactions', filterType, filterCategory],
@@ -156,7 +162,7 @@ const Financial = () => {
   });
 
   // Transaction summary query
-  const { data: summary } = useQuery({
+  const { data: summary, isLoading: summaryLoading, error: summaryError } = useQuery({
     queryKey: ['transaction-summary'],
     queryFn: () => api.get('/transactions/summary').then(res => res.data),
   });
@@ -182,7 +188,7 @@ const Financial = () => {
   });
 
   // Budget summary query (with spending)
-  const { data: budgetSummary } = useQuery({
+  const { data: budgetSummary, isLoading: budgetSummaryLoading, error: budgetSummaryError } = useQuery({
     queryKey: ['budget-summary'],
     queryFn: () => api.get('/budgets/summary').then(res => res.data),
     enabled: viewMode === 'budgets',
@@ -213,7 +219,7 @@ const Financial = () => {
   });
 
   // Investment summary query
-  const { data: investmentSummary } = useQuery({
+  const { data: investmentSummary, isLoading: investmentSummaryLoading, error: investmentSummaryError } = useQuery({
     queryKey: ['investment-summary'],
     queryFn: () => api.get('/investments/summary').then(res => res.data),
     enabled: viewMode === 'investments',
@@ -227,12 +233,9 @@ const Financial = () => {
   });
 
   // Latest net worth query
-  const { data: latestNetWorth } = useQuery({
+  const { data: latestNetWorth, isLoading: latestNetWorthLoading, error: latestNetWorthError } = useQuery<NetWorthSnapshot | null>({
     queryKey: ['latest-net-worth'],
-    queryFn: () => api.get('/net-worth/latest').then(res => res.data).catch((err) => {
-      console.error('Error fetching latest net worth:', err);
-      return null;
-    }),
+    queryFn: () => api.get('/net-worth/latest').then(res => res.data),
     enabled: viewMode === 'networth',
   });
 
@@ -320,8 +323,7 @@ const Financial = () => {
       return api.post('/transactions', payload);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['transactions'] });
-      queryClient.invalidateQueries({ queryKey: ['transaction-summary'] });
+      invalidateTransactionReports();
       resetTransaction();
       setShowTransactionForm(false);
     },
@@ -347,8 +349,7 @@ const Financial = () => {
       return api.put(`/transactions/${id}`, payload);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['transactions'] });
-      queryClient.invalidateQueries({ queryKey: ['transaction-summary'] });
+      invalidateTransactionReports();
       resetTransaction();
       setShowTransactionForm(false);
       setIsEditing(false);
@@ -363,8 +364,7 @@ const Financial = () => {
   const deleteTransactionMutation = useMutation({
     mutationFn: (id: string) => api.delete(`/transactions/${id}`),
     onSuccess: (_, id) => {
-      queryClient.invalidateQueries({ queryKey: ['transactions'] });
-      queryClient.invalidateQueries({ queryKey: ['transaction-summary'] });
+      invalidateTransactionReports();
       if (selectedTransaction?.id === id) {
         setSelectedTransaction(null);
       }
@@ -382,6 +382,7 @@ const Financial = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['budgets'] });
       queryClient.invalidateQueries({ queryKey: ['budget-summary'] });
+      queryClient.invalidateQueries({ queryKey: ['financial-dashboard'] });
       resetBudget();
       setShowBudgetForm(false);
     },
@@ -397,6 +398,7 @@ const Financial = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['budgets'] });
       queryClient.invalidateQueries({ queryKey: ['budget-summary'] });
+      queryClient.invalidateQueries({ queryKey: ['financial-dashboard'] });
       resetBudget();
       setShowBudgetForm(false);
       setIsEditing(false);
@@ -413,6 +415,7 @@ const Financial = () => {
     onSuccess: (_, id) => {
       queryClient.invalidateQueries({ queryKey: ['budgets'] });
       queryClient.invalidateQueries({ queryKey: ['budget-summary'] });
+      queryClient.invalidateQueries({ queryKey: ['financial-dashboard'] });
       if (selectedBudget?.id === id) {
         setSelectedBudget(null);
       }
@@ -429,6 +432,7 @@ const Financial = () => {
     mutationFn: (data: SavingsGoalForm) => api.post('/savings-goals', data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['savings-goals'] });
+      queryClient.invalidateQueries({ queryKey: ['financial-dashboard'] });
       resetGoal();
       setShowGoalForm(false);
     },
@@ -443,6 +447,7 @@ const Financial = () => {
       api.put(`/savings-goals/${id}`, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['savings-goals'] });
+      queryClient.invalidateQueries({ queryKey: ['financial-dashboard'] });
       resetGoal();
       setShowGoalForm(false);
       setIsEditing(false);
@@ -458,6 +463,7 @@ const Financial = () => {
     mutationFn: (id: string) => api.delete(`/savings-goals/${id}`),
     onSuccess: (_, id) => {
       queryClient.invalidateQueries({ queryKey: ['savings-goals'] });
+      queryClient.invalidateQueries({ queryKey: ['financial-dashboard'] });
       if (selectedGoal?.id === id) {
         setSelectedGoal(null);
       }
@@ -927,9 +933,7 @@ const Financial = () => {
                         });
 
                         alert(`Imported ${importRes.data.imported} transactions. ${importRes.data.skipped} skipped.`);
-                        queryClient.invalidateQueries({ queryKey: ['transactions'] });
-                        queryClient.invalidateQueries({ queryKey: ['transaction-summary'] });
-                        queryClient.invalidateQueries({ queryKey: ['financial-dashboard'] });
+                        invalidateTransactionReports();
                       }
                     } catch (err: any) {
                       alert(err?.response?.data?.error || 'Failed to import CSV');
@@ -1009,6 +1013,14 @@ const Financial = () => {
               {/* Overview Section */}
               <div className="dashboard-section">
                 <h2>💰 Financial Overview</h2>
+                <p>
+                  Reporting period: <time dateTime={dashboardData.period.start_date}>{dashboardData.period.start_date}</time>
+                  {' through '}<time dateTime={dashboardData.period.end_date}>{dashboardData.period.end_date}</time>.
+                  {' Based on recorded transactions, not connected bank balances.'}
+                </p>
+                {dashboardData.overview.income_count + dashboardData.overview.expense_count === 0 && (
+                  <p role="status">No income or expense transactions recorded for this period. Zero totals reflect no recorded activity.</p>
+                )}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
                   <div style={{ background: '#e0f2fe', padding: '1.5rem', borderRadius: '8px' }}>
                     <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '0.875rem', color: '#666' }}>Income</h3>
@@ -1025,10 +1037,11 @@ const Financial = () => {
                     <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.875rem', color: '#666' }}>{dashboardData.overview.expense_count} transactions</p>
                   </div>
                   <div style={{ background: '#d1fae5', padding: '1.5rem', borderRadius: '8px' }}>
-                    <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '0.875rem', color: '#666' }}>Savings</h3>
+                    <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '0.875rem', color: '#666' }}>Cash-flow Surplus</h3>
                     <p style={{ margin: 0, fontSize: '2rem', fontWeight: 'bold', color: '#10b981' }}>
                       ${dashboardData.overview.savings.toFixed(2)}
                     </p>
+                    <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.875rem', color: '#666' }}>Positive income minus expenses; not a savings account balance.</p>
                   </div>
                   <div style={{ background: dashboardData.overview.net_cash_flow >= 0 ? '#d1fae5' : '#fee2e2', padding: '1.5rem', borderRadius: '8px' }}>
                     <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '0.875rem', color: '#666' }}>Net Cash Flow</h3>
@@ -1045,21 +1058,21 @@ const Financial = () => {
                   <h2>📊 Financial Health</h2>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
                     <div style={{ background: '#f0f9ff', padding: '1rem', borderRadius: '8px' }}>
-                      <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '0.875rem', color: '#666' }}>Savings Rate</h3>
+                      <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '0.875rem', color: '#666' }}>Cash-flow Surplus Rate</h3>
                       <p style={{ margin: 0, fontSize: '1.5rem', fontWeight: 'bold', color: '#667eea' }}>
-                        {dashboardData.health_indicators.savings_rate.toFixed(1)}%
+                        {dashboardData.overview.income > 0 ? `${dashboardData.health_indicators.savings_rate.toFixed(1)}%` : 'Not applicable (no income)'}
                       </p>
                     </div>
                     <div style={{ background: '#f0f9ff', padding: '1rem', borderRadius: '8px' }}>
                       <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '0.875rem', color: '#666' }}>Expense-to-Income</h3>
                       <p style={{ margin: 0, fontSize: '1.5rem', fontWeight: 'bold', color: '#667eea' }}>
-                        {dashboardData.health_indicators.expense_to_income_ratio.toFixed(1)}%
+                        {dashboardData.overview.income > 0 ? `${dashboardData.health_indicators.expense_to_income_ratio.toFixed(1)}%` : 'Not applicable (no income)'}
                       </p>
                     </div>
                     <div style={{ background: '#f0f9ff', padding: '1rem', borderRadius: '8px' }}>
                       <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '0.875rem', color: '#666' }}>Budget Adherence</h3>
                       <p style={{ margin: 0, fontSize: '1.5rem', fontWeight: 'bold', color: '#667eea' }}>
-                        {dashboardData.health_indicators.budget_adherence.toFixed(1)}%
+                        {dashboardData.budgets.length > 0 ? `${dashboardData.health_indicators.budget_adherence.toFixed(1)}%` : 'No active budgets'}
                       </p>
                     </div>
                   </div>
@@ -1219,11 +1232,12 @@ const Financial = () => {
           ) : cashFlow && cashFlow.length > 0 ? (
             <div className="cashflow-view">
               <h2>Cash Flow Overview</h2>
+              <p>Reporting period: All recorded transaction dates, grouped by calendar month.</p>
               <div className="cashflow-list">
                 {cashFlow.map((month: any, index: number) => (
                   <div key={index} className="cashflow-card">
                     <div className="cashflow-header">
-                      <h3>{new Date(month.month + '-01').toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</h3>
+                      <h3>{new Date(month.month + '-01').toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' })}</h3>
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginTop: '1rem' }}>
                       <div style={{ background: '#e0f2fe', padding: '1rem', borderRadius: '4px' }}>
@@ -1265,32 +1279,45 @@ const Financial = () => {
       {viewMode === 'summary' && (
         <div className="financial-summary">
           <h2>Financial Summary</h2>
-          {summary ? (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
-              <div style={{ background: '#e0f2fe', padding: '1.5rem', borderRadius: '8px' }}>
-                <h3>Total Income</h3>
-                <p style={{ fontSize: '2rem', fontWeight: 'bold', color: '#10b981' }}>
-                  ${summary.income.toFixed(2)}
-                </p>
-                <p style={{ fontSize: '0.875rem', color: '#666' }}>{summary.income_count} transactions</p>
+          <p>Reporting period: All recorded transaction dates and categories.</p>
+          {summaryLoading ? (
+            <LoadingSpinner message="Loading financial summary..." size="large" />
+          ) : summaryError ? (
+            <ErrorMessage
+              message={summaryError instanceof Error ? summaryError.message : 'Failed to load financial summary'}
+              onRetry={() => queryClient.invalidateQueries({ queryKey: ['transaction-summary'] })}
+            />
+          ) : summary ? (
+            <>
+              {summary.income_count + summary.expense_count === 0 && (
+                <p role="status">No income or expense transactions recorded. Zero totals reflect no recorded activity.</p>
+              )}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+                <div style={{ background: '#e0f2fe', padding: '1.5rem', borderRadius: '8px' }}>
+                  <h3>Total Income</h3>
+                  <p style={{ fontSize: '2rem', fontWeight: 'bold', color: '#10b981' }}>
+                    ${summary.income.toFixed(2)}
+                  </p>
+                  <p style={{ fontSize: '0.875rem', color: '#666' }}>{summary.income_count} transactions</p>
+                </div>
+                <div style={{ background: '#fee2e2', padding: '1.5rem', borderRadius: '8px' }}>
+                  <h3>Total Expenses</h3>
+                  <p style={{ fontSize: '2rem', fontWeight: 'bold', color: '#ef4444' }}>
+                    ${summary.expense.toFixed(2)}
+                  </p>
+                  <p style={{ fontSize: '0.875rem', color: '#666' }}>{summary.expense_count} transactions</p>
+                </div>
+                <div style={{ background: summary.net >= 0 ? '#d1fae5' : '#fee2e2', padding: '1.5rem', borderRadius: '8px' }}>
+                  <h3>Net</h3>
+                  <p style={{ fontSize: '2rem', fontWeight: 'bold', color: summary.net >= 0 ? '#10b981' : '#ef4444' }}>
+                    ${summary.net.toFixed(2)}
+                  </p>
+                  <p style={{ fontSize: '0.875rem', color: '#666' }}>
+                    {summary.net >= 0 ? 'Surplus' : 'Deficit'}
+                  </p>
+                </div>
               </div>
-              <div style={{ background: '#fee2e2', padding: '1.5rem', borderRadius: '8px' }}>
-                <h3>Total Expenses</h3>
-                <p style={{ fontSize: '2rem', fontWeight: 'bold', color: '#ef4444' }}>
-                  ${summary.expense.toFixed(2)}
-                </p>
-                <p style={{ fontSize: '0.875rem', color: '#666' }}>{summary.expense_count} transactions</p>
-              </div>
-              <div style={{ background: summary.net >= 0 ? '#d1fae5' : '#fee2e2', padding: '1.5rem', borderRadius: '8px' }}>
-                <h3>Net</h3>
-                <p style={{ fontSize: '2rem', fontWeight: 'bold', color: summary.net >= 0 ? '#10b981' : '#ef4444' }}>
-                  ${summary.net.toFixed(2)}
-                </p>
-                <p style={{ fontSize: '0.875rem', color: '#666' }}>
-                  {summary.net >= 0 ? 'Surplus' : 'Deficit'}
-                </p>
-              </div>
-            </div>
+            </>
           ) : (
             <p>No financial data available</p>
           )}
@@ -1607,12 +1634,17 @@ const Financial = () => {
             </form>
           )}
 
-          {budgetsLoading ? (
+          {budgetsLoading || budgetSummaryLoading ? (
             <LoadingSpinner message="Loading budgets..." size="large" />
           ) : budgetsError ? (
             <ErrorMessage
               message={budgetsError instanceof Error ? budgetsError.message : 'Failed to load budgets'}
               onRetry={() => queryClient.invalidateQueries({ queryKey: ['budgets'] })}
+            />
+          ) : budgetSummaryError ? (
+            <ErrorMessage
+              message={budgetSummaryError instanceof Error ? budgetSummaryError.message : 'Failed to load budget summary'}
+              onRetry={() => queryClient.invalidateQueries({ queryKey: ['budget-summary'] })}
             />
           ) : budgetSummary && budgetSummary.length > 0 ? (
             <div className="budgets-list">
@@ -1684,7 +1716,11 @@ const Financial = () => {
               onAction={handleCreateBudget}
             />
           ) : (
-            <LoadingSpinner message="Loading budget summary..." size="medium" />
+            <EmptyState
+              icon="📊"
+              title="No budget summary data"
+              message="No spending summary was returned for your budgets."
+            />
           )}
         </>
       )}
@@ -1916,7 +1952,14 @@ const Financial = () => {
           )}
 
           {/* Investment Summary */}
-          {investmentSummary && (
+          {investmentSummaryLoading ? (
+            <LoadingSpinner message="Loading investment summary..." size="medium" />
+          ) : investmentSummaryError ? (
+            <ErrorMessage
+              message={investmentSummaryError instanceof Error ? investmentSummaryError.message : 'Failed to load investment summary'}
+              onRetry={() => queryClient.invalidateQueries({ queryKey: ['investment-summary'] })}
+            />
+          ) : investmentSummary && (
             <div style={{ background: 'white', padding: '1.5rem', borderRadius: '8px', marginBottom: '1.5rem', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
               <h3 style={{ marginTop: 0 }}>Investment Summary</h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
@@ -2072,7 +2115,14 @@ const Financial = () => {
           )}
 
           {/* Latest Net Worth Display */}
-          {latestNetWorth && (
+          {latestNetWorthLoading ? (
+            <LoadingSpinner message="Loading latest net worth..." size="medium" />
+          ) : latestNetWorthError ? (
+            <ErrorMessage
+              message={`Latest net worth unavailable: ${latestNetWorthError instanceof Error ? latestNetWorthError.message : 'Failed to load snapshot'}`}
+              onRetry={() => queryClient.invalidateQueries({ queryKey: ['latest-net-worth'] })}
+            />
+          ) : latestNetWorth ? (
             <div style={{ background: 'white', padding: '1.5rem', borderRadius: '8px', marginBottom: '1.5rem', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
               <h3 style={{ marginTop: 0 }}>Latest Net Worth</h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
@@ -2094,11 +2144,13 @@ const Financial = () => {
                     ${parseFloat(latestNetWorth.net_worth).toFixed(2)}
                   </p>
                   <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.875rem', color: '#666' }}>
-                    As of {new Date(latestNetWorth.snapshot_date).toLocaleDateString()}
+                    As of {new Date(latestNetWorth.snapshot_date).toLocaleDateString(undefined, { timeZone: 'UTC' })}
                   </p>
                 </div>
               </div>
             </div>
+          ) : (
+            <p role="status">No latest net worth snapshot recorded.</p>
           )}
 
           {netWorthLoading ? (
@@ -2118,7 +2170,7 @@ const Financial = () => {
                       <div>
                         <h3>Net Worth Snapshot</h3>
                         <span style={{ fontSize: '0.875rem', color: '#666' }}>
-                          {new Date(snapshot.snapshot_date).toLocaleDateString()}
+                          {new Date(snapshot.snapshot_date).toLocaleDateString(undefined, { timeZone: 'UTC' })}
                         </span>
                       </div>
                       <div style={{ textAlign: 'right' }}>

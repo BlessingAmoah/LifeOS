@@ -27,7 +27,7 @@ router.get(
 
       // Calculate date range for the month
       const startDate = `${targetYear}-${String(targetMonth).padStart(2, '0')}-01`;
-      const endDate = new Date(targetYear, targetMonth, 0).toISOString().split('T')[0]; // Last day of month
+      const endDate = new Date(Date.UTC(targetYear, targetMonth, 0)).toISOString().split('T')[0];
 
       // Get income and expenses for the month
       const transactionsResult = await pool.query(
@@ -46,7 +46,7 @@ router.get(
       const income = transactionsResult.rows.find((r: any) => r.type === 'income') || { total: '0', count: '0' };
       const expense = transactionsResult.rows.find((r: any) => r.type === 'expense') || { total: '0', count: '0' };
       const netCashFlow = parseFloat(income.total) - parseFloat(expense.total);
-      const savings = netCashFlow > 0 ? netCashFlow : 0;
+      const cashFlowSurplus = Math.max(netCashFlow, 0);
 
       // Get active budgets with spending
       const budgetsResult = await pool.query(
@@ -100,7 +100,7 @@ router.get(
       // Calculate financial health indicators
       const incomeAmount = parseFloat(income.total);
       const expenseAmount = parseFloat(expense.total);
-      const savingsRate = incomeAmount > 0 ? (savings / incomeAmount) * 100 : 0;
+      const surplusRate = incomeAmount > 0 ? (cashFlowSurplus / incomeAmount) * 100 : 0;
       const expenseToIncomeRatio = incomeAmount > 0 ? (expenseAmount / incomeAmount) * 100 : 0;
 
       // Budget adherence (percentage of budgets not exceeded)
@@ -117,7 +117,8 @@ router.get(
         overview: {
           income: incomeAmount,
           expenses: expenseAmount,
-          savings: savings,
+          // Legacy API name: this is positive cash flow, not a savings balance.
+          savings: cashFlowSurplus,
           net_cash_flow: netCashFlow,
           income_count: parseInt(income.count, 10),
           expense_count: parseInt(expense.count, 10),
@@ -126,7 +127,7 @@ router.get(
         savings_goals: goals,
         recent_transactions: recentTransactionsResult.rows,
         health_indicators: {
-          savings_rate: savingsRate,
+          savings_rate: surplusRate,
           expense_to_income_ratio: expenseToIncomeRatio,
           budget_adherence: budgetAdherence,
         },
@@ -157,7 +158,7 @@ router.get(
 
       let query = `
         SELECT 
-          DATE_TRUNC('month', transaction_date) as month,
+          TO_CHAR(DATE_TRUNC('month', transaction_date), 'YYYY-MM') as month,
           type,
           COALESCE(SUM(amount), 0) as total
         FROM transactions
@@ -185,7 +186,7 @@ router.get(
       // Group by month
       const cashFlowByMonth: any = {};
       result.rows.forEach((row: any) => {
-        const month = row.month.toISOString().split('T')[0].substring(0, 7); // YYYY-MM
+        const month = row.month;
         if (!cashFlowByMonth[month]) {
           cashFlowByMonth[month] = { month, income: 0, expenses: 0, net: 0 };
         }
