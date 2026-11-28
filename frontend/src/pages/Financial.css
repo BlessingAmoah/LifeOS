@@ -176,7 +176,8 @@
   color: #333;
 }
 
-.financial-dashboard .dashboard-section > p {
+.financial-dashboard .dashboard-section > p,
+.financial-summary > p {
   margin: 0 0 1.25rem;
   line-height: 1.6;
 }

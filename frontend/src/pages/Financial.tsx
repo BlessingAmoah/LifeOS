@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import api from '../services/api';
@@ -7,6 +7,8 @@ import ErrorMessage from '../components/ErrorMessage';
 import EmptyState from '../components/EmptyState';
 import FinancialAccounts from '../components/FinancialAccounts';
 import { exportTransactionsToCSV, exportToPDF } from '../utils/exportUtils';
+import { getReportingMonth, subscribeToReportingMonth } from '../utils/reportingPeriod';
+import { getNetWorthDisplay } from '../utils/netWorthDisplay';
 import './Financial.css';
 
 interface TransactionForm {
@@ -144,6 +146,9 @@ const Financial = () => {
   const [filterCategory, setFilterCategory] = useState('');
   const [filterInvestmentType, setFilterInvestmentType] = useState<'all' | 'stock' | 'bond' | 'mutual_fund' | 'etf' | 'crypto' | 'real_estate' | 'other'>('all');
   const queryClient = useQueryClient();
+  const [reportingMonth, setReportingMonth] = useState(getReportingMonth);
+
+  useEffect(() => subscribeToReportingMonth(setReportingMonth), []);
 
   const invalidateTransactionReports = () => {
     for (const key of ['transactions', 'transaction-summary', 'financial-dashboard', 'cash-flow', 'budget-summary']) {
@@ -170,8 +175,10 @@ const Financial = () => {
 
   // Financial dashboard query
   const { data: dashboardData, isLoading: dashboardLoading, error: dashboardError } = useQuery({
-    queryKey: ['financial-dashboard'],
-    queryFn: () => api.get('/financial-dashboard').then(res => res.data),
+    queryKey: ['financial-dashboard', reportingMonth],
+    queryFn: () => api.get('/financial-dashboard', {
+      params: { year: Number(reportingMonth.slice(0, 4)), month: Number(reportingMonth.slice(5)) },
+    }).then(res => res.data),
     enabled: viewMode === 'dashboard',
   });
 
@@ -239,6 +246,7 @@ const Financial = () => {
     queryFn: () => api.get('/net-worth/latest').then(res => res.data),
     enabled: viewMode === 'networth',
   });
+  const latestNetWorthDisplay = latestNetWorth ? getNetWorthDisplay(latestNetWorth) : null;
 
   // Transaction form
   const { register: registerTransaction, handleSubmit: handleTransactionSubmit, reset: resetTransaction, setValue: setTransactionValue, watch: watchTransaction } = useForm<TransactionForm>({
@@ -1016,7 +1024,7 @@ const Financial = () => {
               <div className="dashboard-section">
                 <h2>💰 Financial Overview</h2>
                 <p>
-                  Reporting period: <time dateTime={dashboardData.period.start_date}>{dashboardData.period.start_date}</time>
+                  Reporting period: Current month (UTC), <time dateTime={dashboardData.period.start_date}>{dashboardData.period.start_date}</time>
                   {' through '}<time dateTime={dashboardData.period.end_date}>{dashboardData.period.end_date}</time>.
                   {' Based on recorded transactions, not connected bank balances.'}
                 </p>
@@ -1283,8 +1291,8 @@ const Financial = () => {
       {/* Summary View */}
       {viewMode === 'summary' && (
         <div className="financial-summary">
-          <h2>Financial Summary</h2>
-          <p>Reporting period: All recorded transaction dates and categories.</p>
+          <h2>All-time Financial Summary</h2>
+          <p>Reporting period: All time. Includes all recorded transaction dates and categories.</p>
           {summaryLoading ? (
             <LoadingSpinner message="Loading financial summary..." size="large" />
           ) : summaryError ? (
@@ -2127,29 +2135,35 @@ const Financial = () => {
               message={`Latest net worth unavailable: ${latestNetWorthError instanceof Error ? latestNetWorthError.message : 'Failed to load snapshot'}`}
               onRetry={() => queryClient.invalidateQueries({ queryKey: ['latest-net-worth'] })}
             />
-          ) : latestNetWorth ? (
+          ) : latestNetWorthDisplay ? (
             <div style={{ background: 'white', padding: '1.5rem', borderRadius: '8px', marginBottom: '1.5rem', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
               <h3 style={{ marginTop: 0 }}>Latest Net Worth</h3>
+              {latestNetWorthDisplay.hasUnavailableValues && (
+                <ErrorMessage
+                  message="Some snapshot amounts or the date are missing or invalid. Unavailable values are shown as N/A."
+                  onRetry={() => queryClient.invalidateQueries({ queryKey: ['latest-net-worth'] })}
+                />
+              )}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
                 <div style={{ background: '#d1fae5', padding: '1rem', borderRadius: '4px' }}>
                   <h4 style={{ margin: '0 0 0.5rem 0' }}>Total Assets</h4>
                   <p style={{ margin: 0, fontSize: '1.5rem', fontWeight: 'bold', color: '#10b981' }}>
-                    ${parseFloat(latestNetWorth.total_assets).toFixed(2)}
+                    {latestNetWorthDisplay.assets}
                   </p>
                 </div>
                 <div style={{ background: '#fee2e2', padding: '1rem', borderRadius: '4px' }}>
                   <h4 style={{ margin: '0 0 0.5rem 0' }}>Total Liabilities</h4>
                   <p style={{ margin: 0, fontSize: '1.5rem', fontWeight: 'bold', color: '#ef4444' }}>
-                    ${parseFloat(latestNetWorth.total_liabilities).toFixed(2)}
+                    {latestNetWorthDisplay.liabilities}
                   </p>
                 </div>
-                <div style={{ background: parseFloat(latestNetWorth.net_worth) >= 0 ? '#d1fae5' : '#fee2e2', padding: '1rem', borderRadius: '4px' }}>
+                <div style={{ background: latestNetWorthDisplay.netWorthValue === null ? '#f3f4f6' : latestNetWorthDisplay.netWorthValue >= 0 ? '#d1fae5' : '#fee2e2', padding: '1rem', borderRadius: '4px' }}>
                   <h4 style={{ margin: '0 0 0.5rem 0' }}>Net Worth</h4>
-                  <p style={{ margin: 0, fontSize: '1.5rem', fontWeight: 'bold', color: parseFloat(latestNetWorth.net_worth) >= 0 ? '#10b981' : '#ef4444' }}>
-                    ${parseFloat(latestNetWorth.net_worth).toFixed(2)}
+                  <p style={{ margin: 0, fontSize: '1.5rem', fontWeight: 'bold', color: latestNetWorthDisplay.netWorthValue === null ? '#6b7280' : latestNetWorthDisplay.netWorthValue >= 0 ? '#10b981' : '#ef4444' }}>
+                    {latestNetWorthDisplay.netWorth}
                   </p>
                   <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.875rem', color: '#666' }}>
-                    As of {new Date(latestNetWorth.snapshot_date).toLocaleDateString(undefined, { timeZone: 'UTC' })}
+                    As of {latestNetWorthDisplay.date}
                   </p>
                 </div>
               </div>
@@ -2168,33 +2182,40 @@ const Financial = () => {
           ) : netWorthSnapshots && netWorthSnapshots.length > 0 ? (
             <div className="networth-list">
               {netWorthSnapshots.map((snapshot) => {
-                const netWorth = parseFloat(snapshot.net_worth);
+                const display = getNetWorthDisplay(snapshot);
+                const netWorth = display.netWorthValue;
                 return (
                   <div key={snapshot.id} className="networth-card">
                     <div className="networth-header">
                       <div>
                         <h3>Net Worth Snapshot</h3>
                         <span style={{ fontSize: '0.875rem', color: '#666' }}>
-                          {new Date(snapshot.snapshot_date).toLocaleDateString(undefined, { timeZone: 'UTC' })}
+                          {display.date}
                         </span>
                       </div>
                       <div style={{ textAlign: 'right' }}>
-                        <p style={{ fontSize: '1.5rem', fontWeight: 'bold', color: netWorth >= 0 ? '#10b981' : '#ef4444' }}>
-                          ${netWorth.toFixed(2)}
+                        <p style={{ fontSize: '1.5rem', fontWeight: 'bold', color: netWorth === null ? '#6b7280' : netWorth >= 0 ? '#10b981' : '#ef4444' }}>
+                          {display.netWorth}
                         </p>
                       </div>
                     </div>
+                    {display.hasUnavailableValues && (
+                      <ErrorMessage
+                        message="Some snapshot amounts or the date are missing or invalid. Unavailable values are shown as N/A."
+                        onRetry={() => queryClient.invalidateQueries({ queryKey: ['net-worth'] })}
+                      />
+                    )}
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', marginTop: '0.75rem' }}>
                       <div style={{ background: '#d1fae5', padding: '0.75rem', borderRadius: '4px' }}>
                         <strong style={{ fontSize: '0.875rem', color: '#666' }}>Assets</strong>
                         <p style={{ margin: '0.25rem 0 0 0', fontSize: '1.25rem', fontWeight: 'bold', color: '#10b981' }}>
-                          ${parseFloat(snapshot.total_assets).toFixed(2)}
+                          {display.assets}
                         </p>
                       </div>
                       <div style={{ background: '#fee2e2', padding: '0.75rem', borderRadius: '4px' }}>
                         <strong style={{ fontSize: '0.875rem', color: '#666' }}>Liabilities</strong>
                         <p style={{ margin: '0.25rem 0 0 0', fontSize: '1.25rem', fontWeight: 'bold', color: '#ef4444' }}>
-                          ${parseFloat(snapshot.total_liabilities).toFixed(2)}
+                          {display.liabilities}
                         </p>
                       </div>
                     </div>

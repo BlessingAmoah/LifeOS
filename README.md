@@ -36,8 +36,15 @@ an empty table and does not alter existing user records or seed data.
 
 ### Finance reporting
 
-The Finance dashboard reports its calendar-month date range. Cash Flow and
-Financial Summary cover all recorded transaction dates. Cash-flow surplus is
+The Finance dashboard explicitly requests and labels the current UTC calendar
+month. An open page switches months at the boundary, and checks again when a
+sleeping tab becomes visible or focused. Each month has its own dashboard cache.
+Cash Flow and the All-time Financial Summary cover all recorded transaction dates;
+they do not reset monthly. Dashboard and Summary reporting notes have consistent
+spacing above their cards. Account balances remain manually updated.
+Missing or invalid net-worth snapshot amounts/dates are shown as N/A with an
+explicit error and retry control, not NaN, Invalid Date, or a fabricated zero.
+Cash-flow surplus is
 positive income minus expenses, not a savings account balance; the API retains
 the legacy `savings` and `savings_rate` field names for compatibility.
 No recorded activity is labeled separately from genuine zero totals, and ratios
