@@ -60,8 +60,8 @@ const GrowthPillar = ({ pillar }: { pillar: Pillar }) => {
         <p>{christian ? 'Formation & faithfulness, not performance.' : 'Character & learning beyond career.'}</p>
         {christian && (
           <aside className="growth-scripture" aria-label="Scripture anchor">
-            <strong>Isaiah 43:19</strong>
-            <p>A scripture anchor for noticing new beginnings in this season.</p>
+            <strong>Isaiah 43:19 (WEB)</strong>
+            <p>Behold, I will do a new thing. It springs out now. Don&apos;t you know it? I will even make a way in the wilderness, and rivers in the desert.</p>
           </aside>
         )}
       </header>

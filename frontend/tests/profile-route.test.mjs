@@ -72,6 +72,14 @@ test('the navbar profile destination renders the profile without ending the sess
     assert.ok(page.includes(heading), `${path} must render the intended page`);
     assert.match(page, /Saved reflection/);
     assert.ok(page.includes(`quarterly-audit?pillar=${pillar}`));
+    if (pillar === 'christian_life') {
+      assert.match(page, /Isaiah 43:19 \(WEB\)/);
+      assert.ok(page.includes(
+        'Behold, I will do a new thing. It springs out now. Don&#x27;t you know it? I will even make a way in the wilderness, and rivers in the desert.'
+      ));
+    } else {
+      assert.doesNotMatch(page, /Isaiah 43:19/);
+    }
     assert.equal(useAuthStore.getState().isAuthenticated, true);
   }
 });
