@@ -76,7 +76,7 @@ Balances older than 30 days or manually marked outdated are labeled. Future-date
 observations are flagged. A manual outdated flag remains until explicitly cleared
 in Edit Account. Credit-card/loan values are amounts owed; a negative value means
 a credit or overpayment. These balances do not update other financial modules.
-Insurance tracking is deferred to the next separately reviewed step.
+Insurance policies are tracked separately from these account balances.
 
 Institution and account type are independent: one bank or app can have separate
 checking, savings, credit-card, and investment entries, each with its own history.
@@ -92,6 +92,33 @@ the amount owed, separate from its associated savings account.
 Apple Savings is listed as an Apple Card savings
 product, with form guidance to distinguish its balance from the Apple Card amount
 owed. Apple Pay is excluded because it is a payment wallet, not a separate account.
+
+### Manual insurance policies
+
+Finance -> Insurance supports life, health, auto, home, renters, disability,
+travel, and other policies. Record a nickname, insurer, optional four-character
+reference suffix, premium amount/frequency, optional coverage amount and
+start/end/renewal dates, status, and notes. Full policy numbers, medical fields,
+beneficiary details, and uploads are not supported. Avoid putting those details
+in notes.
+
+Premiums and coverage amounts are exact non-negative decimal strings. Unknown
+amounts/dates are shown as N/A rather than zero; premium amount and frequency
+must either both be recorded or both be absent. Currencies include GHS and are
+kept separate without totals or conversion. Changing a policy's currency
+relabels its entered amounts; it does not convert them.
+
+Filter by policy type/status and include archived policies. Archived policies
+retain their details and must be restored before editing. Statuses are manually
+maintained; UTC calendar-date indicators highlight renewals due within 30 days
+or overdue, excluding cancelled/archived policies. These indicators do not
+confirm coverage, send notifications, or automatically change policy status.
+Insurance does not link insurers, process payments, or change transactions,
+accounts, investments, savings goals, or net-worth snapshots.
+
+Apply only the separately approved `033_add_insurance_policies.sql` before
+deploying this feature. It creates a new owner-scoped policy table and index,
+without modifying existing financial tables or seeding policies.
 
 ### Restored profile, Career, and Budget routes
 

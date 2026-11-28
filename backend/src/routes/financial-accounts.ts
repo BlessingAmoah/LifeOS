@@ -2,10 +2,10 @@ import express, { RequestHandler } from 'express';
 import { body, param, query, validationResult } from 'express-validator';
 import pool from '../config/db';
 import { authenticate, AuthRequest } from '../middleware/auth.middleware';
+import { financialCurrencies as currencies, isCalendarDate, isDecimalAmount } from '../utils/financeValidation';
 
 const router = express.Router();
 const accountTypes = ['checking', 'savings', 'cash', 'credit_card', 'investment', 'loan', 'other'];
-const currencies = ['USD', 'GHS', 'CAD', 'EUR', 'GBP', 'AUD', 'NZD', 'CHF', 'JPY'];
 const metadataFields = ['name', 'account_type', 'institution_name', 'account_suffix', 'is_stale'];
 const validate: RequestHandler = (req, res, next) => {
   const errors = validationResult(req);
@@ -27,11 +27,9 @@ const metadata = () => [
   body('is_stale').optional().custom(value => typeof value === 'boolean'),
 ];
 const balanceFields = () => [
-  body('balance').isString().bail().matches(/^-?(?:0|[1-9]\d{0,15})(?:\.\d{1,2})?$/)
+  body('balance').isString().bail().custom(isDecimalAmount)
     .withMessage('Balance must be a decimal amount with at most two decimal places'),
-  body('balance_as_of').isString().bail().matches(/^\d{4}-\d{2}-\d{2}$/).bail().custom(value =>
-    !value.startsWith('0000-') && new Date(`${value}T00:00:00Z`).toISOString().slice(0, 10) === value
-  ).withMessage('Use a valid calendar date'),
+  body('balance_as_of').isString().bail().custom(isCalendarDate).withMessage('Use a valid calendar date'),
 ];
 const accountSelect = `
   SELECT a.*, b.balance, TO_CHAR(b.balance_as_of, 'YYYY-MM-DD') AS balance_as_of,

@@ -6,6 +6,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
 import EmptyState from '../components/EmptyState';
 import FinancialAccounts from '../components/FinancialAccounts';
+import InsurancePolicies from '../components/InsurancePolicies';
 import { exportTransactionsToCSV, exportToPDF } from '../utils/exportUtils';
 import { getReportingMonth, subscribeToReportingMonth } from '../utils/reportingPeriod';
 import { getNetWorthDisplay } from '../utils/netWorthDisplay';
@@ -128,7 +129,7 @@ interface NetWorthSnapshot {
 }
 
 const Financial = () => {
-  const [viewMode, setViewMode] = useState<'transactions' | 'budgets' | 'goals' | 'summary' | 'investments' | 'networth' | 'dashboard' | 'cashflow' | 'planning' | 'accounts'>('dashboard');
+  const [viewMode, setViewMode] = useState<'transactions' | 'budgets' | 'goals' | 'summary' | 'investments' | 'networth' | 'dashboard' | 'cashflow' | 'planning' | 'accounts' | 'insurance'>('dashboard');
   const [showTransactionForm, setShowTransactionForm] = useState(false);
   const [showBudgetForm, setShowBudgetForm] = useState(false);
   const [showGoalForm, setShowGoalForm] = useState(false);
@@ -810,6 +811,7 @@ const Financial = () => {
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap', minWidth: 0 }}>
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
             <button onClick={() => setViewMode('accounts')} style={{ padding: '0.5rem 1rem', background: viewMode === 'accounts' ? '#667eea' : '#f0f0f0', color: viewMode === 'accounts' ? 'white' : '#333', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Accounts</button>
+            <button onClick={() => setViewMode('insurance')} style={{ padding: '0.5rem 1rem', background: viewMode === 'insurance' ? '#667eea' : '#f0f0f0', color: viewMode === 'insurance' ? 'white' : '#333', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Insurance</button>
             <button
               onClick={() => setViewMode('transactions')}
               style={{
@@ -1231,6 +1233,7 @@ const Financial = () => {
       )}
 
       {viewMode === 'accounts' && <FinancialAccounts />}
+      {viewMode === 'insurance' && <InsurancePolicies />}
 
       {/* Cash Flow View */}
       {viewMode === 'cashflow' && (

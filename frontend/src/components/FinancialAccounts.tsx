@@ -1,10 +1,10 @@
 import { useState, type FormEvent } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
 import api from '../services/api';
 import LoadingSpinner from './LoadingSpinner';
 import ErrorMessage from './ErrorMessage';
 import EmptyState from './EmptyState';
+import { financialCurrencies as currencies, financeErrorMessage as message } from '../utils/finance';
 import './FinancialAccounts.css';
 
 const accountTypes = [
@@ -12,7 +12,6 @@ const accountTypes = [
   ['credit_card', 'Credit card'], ['investment', 'Investment'], ['loan', 'Loan'], ['other', 'Other'],
 ] as const;
 type AccountType = typeof accountTypes[number][0];
-const currencies = ['USD', 'GHS', 'CAD', 'EUR', 'GBP', 'AUD', 'NZD', 'CHF', 'JPY'];
 const institutions = [
   { group: 'US banks and credit-card issuers', names: ['Ally Bank', 'American Express', 'Bank of America', 'Barclays US', 'Capital One', 'Chase', 'Citi', 'Discover (Capital One)', 'PNC Bank', 'SoFi Bank', 'Synchrony', 'Truist', 'U.S. Bank', 'Wells Fargo'] },
   { group: 'Ghanaian banks', names: [
@@ -73,13 +72,6 @@ const newForm = (): AccountForm => ({
   name: '', account_type: 'checking', currency: 'USD', institution: '', custom_institution: '',
   account_suffix: '', is_stale: false, balance: '', balance_as_of: today(),
 });
-function message(error: unknown) {
-  if (isAxiosError<{ error?: string; errors?: { msg: string }[] }>(error)) {
-    if (error.response?.data?.errors?.length) return error.response.data.errors.map(item => item.msg).join('; ');
-    if (error.response?.data?.error) return error.response.data.error;
-  }
-  return error instanceof Error ? error.message : 'Request failed. Please retry.';
-}
 function balanceStatus(account: Account) {
   if (!account.balance_as_of) return 'No recorded balance';
   if (account.is_stale) return 'Manually marked outdated';
