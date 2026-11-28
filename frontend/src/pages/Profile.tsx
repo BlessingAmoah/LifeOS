@@ -5,6 +5,7 @@ import api from '../services/api';
 import { useAuthStore } from '../context/AuthContext';
 import VerificationModal from '../components/VerificationModal';
 import Tabs from '../components/Tabs';
+import ErrorMessage from '../components/ErrorMessage';
 import './Profile.css';
 
 interface ProfileData {
@@ -61,7 +62,7 @@ const Profile = () => {
   const [verificationType, setVerificationType] = useState<'password' | 'email'>('password');
   const [activeTab, setActiveTab] = useState<'account' | 'contact' | 'password' | 'avatar'>('account');
 
-  const { data: profile, isLoading } = useQuery<ProfileData>({
+  const { data: profile, isLoading, error, refetch } = useQuery<ProfileData>({
     queryKey: ['profile'],
     queryFn: () => api.get('/profiles').then(res => res.data),
   });
@@ -199,6 +200,9 @@ const Profile = () => {
   };
 
   if (isLoading) return <div className="profile-loading">Loading profile...</div>;
+  if (error) {
+    return <ErrorMessage message="Failed to load profile" onRetry={() => { void refetch(); }} />;
+  }
 
   const tabs = [
     { id: 'account', label: 'Account Info', icon: '👤' },

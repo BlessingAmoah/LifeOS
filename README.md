@@ -21,6 +21,22 @@ A private, cloud-hosted personal dashboard designed to help individuals intentio
 
 ## Features
 
+### Restored profile, Career, and Budget routes
+
+The navigation avatar opens `/dashboard/profile` for account settings. Career
+and Budget APIs used by the existing pages are registered again. Their tables
+come from migrations `015`, `019`, and `020`; verify these are applied before
+deploying to a new database. Restoring routes does not run migrations or seed data.
+
+Focused regression checks:
+
+```bash
+npm --prefix backend run build
+node --test backend/tests/*.test.js
+cd frontend
+node --test tests/*.test.mjs
+```
+
 ### Core Modules
 
 1. **Authentication** ✅
@@ -200,8 +216,6 @@ LifeOS/
 │   └── package.json
 └── azure/           # Azure deployment configurations
     ├── setup-resources.sh    # Automated Azure setup
-    ├── deploy-backend.sh     # Backend deployment
-    ├── deploy-frontend.sh    # Frontend deployment
     └── README.md             # Azure setup documentation
 ```
 
@@ -321,19 +335,16 @@ export DATABASE_URL="postgresql://lifeosadmin:password@lifeos-db.postgres.databa
 npm run migrate
 ```
 
-#### 2. Deploy Backend
+#### 2. Deploy Applications with GitHub Actions
 
-```bash
-cd azure
-./deploy-backend.sh
-```
+Push backend or frontend changes to `main` to trigger the corresponding
+deployment workflow. For a manual rerun, open GitHub Actions, select
+**Deploy Backend to Azure** or **Deploy Frontend to Azure**, and choose
+**Run workflow** on `main`.
 
-#### 3. Deploy Frontend
-
-```bash
-cd azure
-./deploy-frontend.sh
-```
+Both workflows use Azure OIDC with the repository secrets `AZURE_CLIENT_ID`,
+`AZURE_TENANT_ID`, and `AZURE_SUBSCRIPTION_ID`. They build and package the
+applications on the runner; no local deployment ZIP is required.
 
 ### Manual Setup
 

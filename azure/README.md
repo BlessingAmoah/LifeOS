@@ -159,19 +159,15 @@ export DATABASE_URL="postgresql://lifeosadmin:password@lifeos-db.postgres.databa
 npm run migrate
 ```
 
-### 2. Deploy Backend
+### 2. Deploy Applications
 
-```bash
-cd azure
-./deploy-backend.sh
-```
-
-### 3. Deploy Frontend
-
-```bash
-cd azure
-./deploy-frontend.sh
-```
+Push backend or frontend changes to `main`; the corresponding GitHub Actions
+workflow builds, packages, and deploys the application using Azure OIDC.
+To rerun a deployment, select **Deploy Backend to Azure** or
+**Deploy Frontend to Azure** in GitHub Actions and choose **Run workflow** on
+`main`. Configure `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, and
+`AZURE_SUBSCRIPTION_ID` as repository secrets before running the workflows.
+Local deployment ZIPs and the old manual deployment scripts are not required.
 
 ## Location Restrictions
 

@@ -50,14 +50,11 @@ npm run migrate
 
 ### 2. Deploy Applications
 
-```bash
-# Deploy backend
-cd azure
-./deploy-backend.sh
-
-# Deploy frontend  
-./deploy-frontend.sh
-```
+Push backend or frontend changes to `main` to deploy through GitHub Actions.
+Alternatively, select **Deploy Backend to Azure** or **Deploy Frontend to Azure**
+in GitHub Actions and choose **Run workflow** on `main`.
+The workflows require the repository secrets `AZURE_CLIENT_ID`,
+`AZURE_TENANT_ID`, and `AZURE_SUBSCRIPTION_ID` for Azure OIDC authentication.
 
 ### 3. Access Your App
 

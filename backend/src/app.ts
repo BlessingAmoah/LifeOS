@@ -32,6 +32,17 @@ import financialPlansRoutes from './routes/financial-plans';
 import searchRoutes from './routes/search';
 import notificationsRoutes from './routes/notifications';
 import stewardshipRoutes from './modules/stewardship/stewardship.routes';
+import budgetsRoutes from './routes/budgets';
+import careerGoalsRoutes from './routes/career-goals';
+import skillsRoutes from './routes/skills';
+import rolesRoutes from './routes/roles';
+import feedbackNotesRoutes from './routes/feedback-notes';
+import resumeVersionsRoutes from './routes/resume-versions';
+import interviewPrepRoutes from './routes/interview-prep';
+import careerMilestonesRoutes from './routes/career-milestones';
+import careerProfileRoutes from './routes/career-profile';
+import impactNotesRoutes from './routes/impact-notes';
+import applicationsRoutes from './routes/applications';
 
 const app = express();
 
@@ -138,6 +149,17 @@ app.use('/api/health', healthRoutes);
     app.use('/api/search', searchRoutes);
     app.use('/api/notifications', notificationsRoutes);
     app.use('/api/stewardship', stewardshipRoutes);
+    app.use('/api/budgets', budgetsRoutes);
+    app.use('/api/career-goals', careerGoalsRoutes);
+    app.use('/api/skills', skillsRoutes);
+    app.use('/api/roles', rolesRoutes);
+    app.use('/api/feedback-notes', feedbackNotesRoutes);
+    app.use('/api/resume-versions', resumeVersionsRoutes);
+    app.use('/api/interview-prep', interviewPrepRoutes);
+    app.use('/api/career-milestones', careerMilestonesRoutes);
+    app.use('/api/career-profile', careerProfileRoutes);
+    app.use('/api/impact-notes', impactNotesRoutes);
+    app.use('/api/applications', applicationsRoutes);
 
 // Error handling
 app.use(notFoundHandler);
